@@ -7,6 +7,9 @@ class ChoiceEnum(Enum):
     def choices(cls):
         return list((choice.value, choice.name) for choice in cls)
 
+    def __str__(self):
+        return str(self.value)
+
 
 class CriticalRating(ChoiceEnum):
     NOT_APPLICABLE = 0

@@ -8,3 +8,12 @@ def test_choices():
 
     expected_choices = [(0, "A"), (1, "B")]
     assert TestEnum.choices() == expected_choices
+
+
+def test_as_string():
+    class TestEnum(choices.ChoiceEnum):
+        A = 0
+        B = "jazz"
+
+    assert str(TestEnum.A) == "0"
+    assert str(TestEnum.B) == "jazz"
