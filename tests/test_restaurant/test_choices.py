@@ -16,4 +16,6 @@ def test_as_string():
         B = "jazz"
 
     assert str(TestEnum.A) == "0"
+    assert repr(TestEnum.A) == "0"
     assert str(TestEnum.B) == "jazz"
+    assert repr(TestEnum.B) == "jazz"
