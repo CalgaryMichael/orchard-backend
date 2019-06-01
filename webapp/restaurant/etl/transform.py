@@ -1,12 +1,26 @@
 from webapp.restaurant import models
 from django.utils.text import slugify
+from . import Headers
 
 
 def _transform_restaurant_types(type_list):
-    """Returns a generator of a normalized RestaurantType object"""
+    """Returns a generator of normalized RestaurantType objects"""
     return (models.RestaurantType(slug=slugify(t), description=t) for t in type_list)
 
 
+def _transform_restaurants(restaurants):
+    """Returns a generator of normalized Restaurant objects"""
+    restaurant_mapping = list()
+    type_mapping = dict(models.RestaurantType.objects.all().values_list("slug", "id"))
+    for restaurant in restaurants:
+        restaurant_type = slugify(restaurant[Headers.RESTAURANT_TYPES])
+        restaurant_mapping.append({
+            "code": restaurant[Headers.RESTAURANT_CODES],
+            "name": restaurant[Headers.RESTAURANT_NAME],
+            "restaurant_type_id": type_mapping[restaurant_type]})
+    return (models.Restaurant(**restaurant) for restaurant in restaurant_mapping)
+
+
 def _transform_grades(grade_list):
-    """Returns a generator of a normalized Grade object"""
+    """Returns a generator of normalized Grade objects"""
     return (models.Grade(slug=slugify(g), label=g) for g in grade_list)

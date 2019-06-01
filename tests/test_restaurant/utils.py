@@ -1,6 +1,11 @@
 from webapp.restaurant import models
 
 
+def create_restaurant_type(type_slug):
+    """Helper function for creating a Restaurant and a RestaurantType"""
+    return models.RestaurantType.objects.create(slug=type_slug, description=type_slug.title())
+
+
 def create_restaurant(code, name, type_slug):
     """Helper function for creating a Restaurant and a RestaurantType"""
     restaurant_type, _ = models.RestaurantType.objects.get_or_create(slug=type_slug, description=type_slug.title())
