@@ -20,3 +20,22 @@ def test_load_restaurant_types__empty_list():
     unloaded = []
     load.load_restaurant_types(unloaded)
     assert models.RestaurantType.objects.all().count() == 0
+
+
+@pytest.mark.django_db
+def test_load_grades():
+    assert models.Grade.objects.all().count() == 0
+    unloaded = [
+        models.Grade(slug="a", label="A"),
+        models.Grade(slug="b", label="B"),
+        models.Grade(slug="c", label="C")]
+    load.load_grades(unloaded)
+    assert models.Grade.objects.all().count() == 3
+
+
+@pytest.mark.django_db
+def test_load_grades__empty_list():
+    assert models.Grade.objects.all().count() == 0
+    unloaded = []
+    load.load_grades(unloaded)
+    assert models.Grade.objects.all().count() == 0
