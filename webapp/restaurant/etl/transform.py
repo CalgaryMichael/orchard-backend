@@ -6,6 +6,11 @@ from django.utils.text import slugify
 from . import Headers
 
 
+def normalize(value):
+    """Normalizes Pandas NaN to python None"""
+    return value if pd.isnull(value) is False else None
+
+
 def transform_restaurant_types(type_list):
     """Returns a generator of normalized RestaurantType objects"""
     return (models.RestaurantType(slug=slugify(t), description=t) for t in type_list)
@@ -29,7 +34,7 @@ def transform_restaurant_contacts(contacts):
     contact_mapping = list()
     restaurant_mapping = dict(models.Restaurant.objects.all().values_list("code", "id"))
     for contact in contacts:
-        restaurant = contact[Headers.RESTAURANT_CODES.value]
+        restaurant = str(contact[Headers.RESTAURANT_CODES.value])
         contact_mapping.append({
             "restaurant_id": restaurant_mapping[restaurant],
             "boro": contact[Headers.BORO.value],
@@ -52,7 +57,9 @@ def transform_inspection_types(inspection_types):
 
 def _convert_date(date_string):
     """Convert a string into a Date object or None"""
-    return datetime.datetime.strptime(date_string, "%m/%d/%Y").date() if date_string else None
+    if pd.isnull(date_string):
+        return
+    return datetime.datetime.strptime(date_string, "%m/%d/%y").date()
 
 
 def transform_inspections(inspections):
@@ -62,8 +69,8 @@ def transform_inspections(inspections):
     grade_mapping = dict(models.Grade.objects.all().values_list("slug", "id"))
     type_mapping = dict(models.InspectionType.objects.all().values_list("slug", "id"))
     for inspection in inspections:
-        restaurant = inspection[Headers.RESTAURANT_CODES.value]
-        grade = inspection[Headers.GRADES.value]
+        restaurant = str(inspection[Headers.RESTAURANT_CODES.value])
+        grade = normalize(inspection[Headers.GRADES.value])
         inspection_type = slugify(inspection[Headers.INSPECTION_TYPE.value])
         grade_date = inspection[Headers.GRADE_DATE.value]
         inspection_date = inspection[Headers.INSPECTION_DATE.value]
@@ -73,15 +80,15 @@ def transform_inspections(inspections):
             "grade_date": _convert_date(grade_date),
             "inspection_type_id": type_mapping[inspection_type],
             "inspection_date": _convert_date(inspection_date),
-            "score": inspection[Headers.INSPECTION_SCORE.value]})
+            "score": normalize(inspection[Headers.INSPECTION_SCORE.value])})
     return (models.Inspection(**inspection) for inspection in inspection_mapping)
 
 
 def _get_inspection_id(inspections, violation):
     """Finds the associated Inspection ID for a row of extracted Violation data"""
-    inspection_date = datetime.datetime.strptime(violation[Headers.INSPECTION_DATE.value], "%m/%d/%Y").date()
+    inspection_date = datetime.datetime.strptime(violation[Headers.INSPECTION_DATE.value], "%m/%d/%y").date()
     inspection = inspections[
-        (violation[Headers.RESTAURANT_CODES.value] == inspections.restaurant__code)
+        (str(violation[Headers.RESTAURANT_CODES.value]) == inspections.restaurant__code)
         & (inspection_date == inspections.inspection_date)
     ]
     return inspection.id.values[0]
@@ -99,6 +106,6 @@ def transform_violations(violations):
             "inspection_id": inspection_id,
             "code": violation[Headers.VIOLATION_CODE.value],
             "critical_rating": critical_rating.value,
-            "description": violation[Headers.VIOLATION_DESCRIPTION.value]
+            "description": normalize(violation[Headers.VIOLATION_DESCRIPTION.value])
         })
     return (models.Violation(**violation) for violation in violation_mapping)
