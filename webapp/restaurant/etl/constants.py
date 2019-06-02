@@ -1,7 +1,5 @@
 import enum
 
-BATCH_SIZE = 150
-
 
 class Headers(enum.Enum):
     """A collection of CSV headers"""
