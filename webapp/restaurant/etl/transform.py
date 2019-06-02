@@ -1,3 +1,5 @@
+import functools
+import datetime
 from webapp.restaurant import models
 from django.utils.text import slugify
 from . import Headers
@@ -40,3 +42,28 @@ def _transform_restaurant_contacts(contacts):
 def _transform_grades(grade_list):
     """Returns a generator of normalized Grade objects"""
     return (models.Grade(slug=slugify(g), label=g) for g in grade_list)
+
+
+def _convert_date(date_string):
+    """Convert a string into a Date object or None"""
+    return datetime.datetime.strptime(date_string, "%m/%d/%Y").date() if date_string else None
+
+
+def _transform_inspections(inspections):
+    """Returns a generator of normalized Inspection objects"""
+    inspection_mapping = list()
+    restaurant_mapping = dict(models.Restaurant.objects.all().values_list("code", "id"))
+    grade_mapping = dict(models.Grade.objects.all().values_list("slug", "id"))
+    for inspection in inspections:
+        restaurant = inspection[Headers.RESTAURANT_CODES]
+        grade = inspection[Headers.GRADES]
+        grade_date = inspection[Headers.GRADE_DATE]
+        inspection_date = inspection[Headers.INSPECTION_DATE]
+        inspection_mapping.append({
+            "restaurant_id": restaurant_mapping[restaurant],
+            "grade_id": grade_mapping[slugify(grade)] if grade is not None else None,
+            "grade_date": _convert_date(grade_date),
+            "inspection_type": inspection[Headers.INSPECTION_TYPE],
+            "inspection_date": _convert_date(inspection_date),
+            "score": inspection[Headers.INSPECTION_SCORE]})
+    return (models.Inspection(**inspection) for inspection in inspection_mapping)

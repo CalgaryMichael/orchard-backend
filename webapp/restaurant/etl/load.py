@@ -33,3 +33,11 @@ def load_restaurant_contacts(contacts):
 def load_grades(grades):
     """Load Grade objects into database"""
     return models.Grade.objects.bulk_create(grades)
+
+
+def load_inspections(inspections):
+    """Load Inspection objects into database"""
+    loaded = list()
+    for batch in chunk(inspections):
+        loaded += models.Inspection.objects.bulk_create(batch, constants.BATCH_SIZE)
+    return loaded

@@ -120,6 +120,75 @@ def test_extract_restaurant_contacts__empty():
     assert restaurants == expected_data
 
 
+def test_extract_inspections():
+    csv = pd.DataFrame.from_dict({
+        Headers.RESTAURANT_CODES: ["30075445", "30112340", "40356018", "40356018", "40061600"],
+        Headers.INSPECTION_TYPE: ["Cycle Inspection / Initial Inspection"] * 5,
+        Headers.INSPECTION_DATE: ["5/16/2019", "5/15/2019", "5/16/2019", "5/14/2019", "5/16/2019"],
+        Headers.INSPECTION_SCORE: [18, 20, 14, 25, 5],
+        Headers.GRADES: ["A", "B", None, "C", "A"],
+        Headers.GRADE_DATE: ["5/16/2019", "5/15/2019", None, "5/14/2019", "5/16/2019"]
+    })
+    inspections = extract._extract_inspections(csv)
+    expected_data = [
+        {
+            Headers.RESTAURANT_CODES: "30075445",
+            Headers.INSPECTION_TYPE: "Cycle Inspection / Initial Inspection",
+            Headers.INSPECTION_DATE: "5/16/2019",
+            Headers.INSPECTION_SCORE: 18,
+            Headers.GRADES: "A",
+            Headers.GRADE_DATE: "5/16/2019"
+        },
+        {
+            Headers.RESTAURANT_CODES: "30112340",
+            Headers.INSPECTION_TYPE: "Cycle Inspection / Initial Inspection",
+            Headers.INSPECTION_DATE: "5/15/2019",
+            Headers.INSPECTION_SCORE: 20,
+            Headers.GRADES: "B",
+            Headers.GRADE_DATE: "5/15/2019"
+        },
+        {
+            Headers.RESTAURANT_CODES: "40356018",
+            Headers.INSPECTION_TYPE: "Cycle Inspection / Initial Inspection",
+            Headers.INSPECTION_DATE: "5/16/2019",
+            Headers.INSPECTION_SCORE: 14,
+            Headers.GRADES: None,
+            Headers.GRADE_DATE: None
+        },
+        {
+            Headers.RESTAURANT_CODES: "40356018",
+            Headers.INSPECTION_TYPE: "Cycle Inspection / Initial Inspection",
+            Headers.INSPECTION_DATE: "5/14/2019",
+            Headers.INSPECTION_SCORE: 25,
+            Headers.GRADES: "C",
+            Headers.GRADE_DATE: "5/14/2019"
+        },
+        {
+            Headers.RESTAURANT_CODES: "40061600",
+            Headers.INSPECTION_TYPE: "Cycle Inspection / Initial Inspection",
+            Headers.INSPECTION_DATE: "5/16/2019",
+            Headers.INSPECTION_SCORE: 5,
+            Headers.GRADES: "A",
+            Headers.GRADE_DATE: "5/16/2019"
+        }
+    ]
+    assert inspections == expected_data
+
+
+def test_extract_inspections__empty():
+    csv = pd.DataFrame.from_dict({
+        Headers.RESTAURANT_CODES: [],
+        Headers.INSPECTION_TYPE: [],
+        Headers.INSPECTION_DATE: [],
+        Headers.INSPECTION_SCORE: [],
+        Headers.GRADES: [],
+        Headers.GRADE_DATE: []
+    })
+    inspections = extract._extract_inspections(csv)
+    expected_data = []
+    assert inspections == expected_data
+
+
 def test_extract_grades():
     csv = pd.DataFrame.from_dict({Headers.GRADES: ["A", None, "", "B", "C", "", "G", "P", None, "Z"]})
     expected_data = ["A", "B", "C", "G", "P", "Z"]

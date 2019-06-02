@@ -1,3 +1,4 @@
+import datetime
 import pytest
 from webapp.restaurant import models
 from webapp.restaurant.etl import load
@@ -110,3 +111,71 @@ def test_load_grades__empty_list():
     unloaded = []
     load.load_grades(unloaded)
     assert models.Grade.objects.all().count() == 0
+
+
+@pytest.mark.django_db
+def test_load_inspections():
+    morris = utils.create_restaurant("30075445", "MORRIS PARK BAKE SHOP", "bakery")
+    wendys1 = utils.create_restaurant("30112340", "WENDY'S", "hamburgers")
+    riviera = utils.create_restaurant("40356018", "RIVIERA CATERERS", "american")
+    wendys2 = utils.create_restaurant("40061600", "WENDY'S", "hamburgers")
+
+    grade_a = utils.create_grade("A")
+    grade_b = utils.create_grade("B")
+    grade_c = utils.create_grade("C")
+
+    assert models.Inspection.objects.all().count() == 0
+    unloaded = [
+        models.Inspection(
+            restaurant_id=morris.id,
+            inspection_type="Cycle Inspection / Initial Inspection",
+            inspection_date=datetime.date(2019, 5, 16),
+            score=18,
+            grade_id=grade_a.id,
+            grade_date=datetime.date(2019, 5, 16)),
+        models.Inspection(
+            restaurant_id=wendys1.id,
+            inspection_type="Cycle Inspection / Initial Inspection",
+            inspection_date=datetime.date(2019, 5, 15),
+            score=20,
+            grade_id=grade_b.id,
+            grade_date=datetime.date(2019, 5, 15)),
+        models.Inspection(
+            restaurant_id=riviera.id,
+            inspection_type="Cycle Inspection / Initial Inspection",
+            inspection_date=datetime.date(2019, 5, 16),
+            score=14,
+            grade_id=None,
+            grade_date=None),
+        models.Inspection(
+            restaurant_id=riviera.id,
+            inspection_type="Cycle Inspection / Initial Inspection",
+            inspection_date=datetime.date(2019, 5, 14),
+            score=25,
+            grade_id=grade_c.id,
+            grade_date=datetime.date(2019, 5, 14)),
+        models.Inspection(
+            restaurant_id=wendys2.id,
+            inspection_type="Cycle Inspection / Initial Inspection",
+            inspection_date=datetime.date(2019, 5, 16),
+            score=5,
+            grade_id=grade_a.id,
+            grade_date=datetime.date(2019, 5, 16))]
+    load.load_inspections(iter(unloaded))
+    assert models.Inspection.objects.all().count() == 5
+    assert models.Inspection.objects.filter(restaurant=morris).count() == 1
+    assert models.Inspection.objects.filter(restaurant=wendys1).count() == 1
+    assert models.Inspection.objects.filter(restaurant=riviera).count() == 2
+    assert models.Inspection.objects.filter(restaurant=wendys2).count() == 1
+    assert models.Inspection.objects.filter(grade=grade_a).count() == 2
+    assert models.Inspection.objects.filter(grade=grade_b).count() == 1
+    assert models.Inspection.objects.filter(grade=grade_c).count() == 1
+    assert models.Inspection.objects.filter(grade=None).count() == 1
+
+
+@pytest.mark.django_db
+def test_load_inspections__empty_list():
+    assert models.Inspection.objects.all().count() == 0
+    unloaded = []
+    load.load_inspections(unloaded)
+    assert models.Inspection.objects.all().count() == 0

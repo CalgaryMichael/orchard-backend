@@ -34,3 +34,15 @@ def _extract_grades(csv):
     """Normalize data for Grade model transformation"""
     grades = csv[Headers.GRADES].replace("", np.nan).dropna()
     return (grade for grade in grades.unique())
+
+
+def _extract_inspections(csv):
+    """Normalize data for Inspection model transformation"""
+    columns = [
+        Headers.RESTAURANT_CODES,
+        Headers.INSPECTION_TYPE,
+        Headers.INSPECTION_DATE,
+        Headers.INSPECTION_SCORE,
+        Headers.GRADES,
+        Headers.GRADE_DATE]
+    return csv[columns].to_dict(orient="record")

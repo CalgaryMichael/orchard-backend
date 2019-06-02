@@ -1,4 +1,5 @@
 from webapp.restaurant import models
+from django.utils.text import slugify
 
 
 def create_restaurant_type(type_slug):
@@ -35,3 +36,7 @@ def create_inspection(restaurant, inspection_type, date, score, grade_slug=None)
         score=score,
         grade=grade,
         grade_date=grade_date)
+
+
+def create_grade(grade):
+    return models.Grade.objects.create(slug=slugify(grade), label=grade)

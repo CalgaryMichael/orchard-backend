@@ -1,3 +1,4 @@
+import datetime
 import pytest
 from webapp.restaurant import models
 from webapp.restaurant.etl import transform, Headers
@@ -149,3 +150,103 @@ def test_transform_grades():
     for i, grade in enumerate(grades):
         assert grade.slug == expected_grades[i].slug
         assert grade.label == expected_grades[i].label
+
+
+@pytest.mark.django_db
+def test_transform_inspections():
+    morris = utils.create_restaurant("30075445", "MORRIS PARK BAKE SHOP", "bakery")
+    wendys1 = utils.create_restaurant("30112340", "WENDY'S", "hamburgers")
+    riviera = utils.create_restaurant("40356018", "RIVIERA CATERERS", "american")
+    wendys2 = utils.create_restaurant("40061600", "WENDY'S", "hamburgers")
+
+    grade_a = utils.create_grade("A")
+    grade_b = utils.create_grade("B")
+    grade_c = utils.create_grade("C")
+
+    untransformed = [
+        {
+            Headers.RESTAURANT_CODES: "30075445",
+            Headers.INSPECTION_TYPE: "Cycle Inspection / Initial Inspection",
+            Headers.INSPECTION_DATE: "5/16/2019",
+            Headers.INSPECTION_SCORE: 18,
+            Headers.GRADES: "A",
+            Headers.GRADE_DATE: "5/16/2019"
+        },
+        {
+            Headers.RESTAURANT_CODES: "30112340",
+            Headers.INSPECTION_TYPE: "Cycle Inspection / Initial Inspection",
+            Headers.INSPECTION_DATE: "5/15/2019",
+            Headers.INSPECTION_SCORE: 20,
+            Headers.GRADES: "B",
+            Headers.GRADE_DATE: "5/15/2019"
+        },
+        {
+            Headers.RESTAURANT_CODES: "40356018",
+            Headers.INSPECTION_TYPE: "Cycle Inspection / Initial Inspection",
+            Headers.INSPECTION_DATE: "5/16/2019",
+            Headers.INSPECTION_SCORE: 14,
+            Headers.GRADES: None,
+            Headers.GRADE_DATE: None
+        },
+        {
+            Headers.RESTAURANT_CODES: "40356018",
+            Headers.INSPECTION_TYPE: "Cycle Inspection / Initial Inspection",
+            Headers.INSPECTION_DATE: "5/14/2019",
+            Headers.INSPECTION_SCORE: 25,
+            Headers.GRADES: "C",
+            Headers.GRADE_DATE: "5/14/2019"
+        },
+        {
+            Headers.RESTAURANT_CODES: "40061600",
+            Headers.INSPECTION_TYPE: "Cycle Inspection / Initial Inspection",
+            Headers.INSPECTION_DATE: "5/16/2019",
+            Headers.INSPECTION_SCORE: 5,
+            Headers.GRADES: "A",
+            Headers.GRADE_DATE: "5/16/2019"
+        }
+    ]
+    inspections = transform._transform_inspections(untransformed)
+    expected_inspections = [
+        models.Inspection(
+            restaurant_id=morris.id,
+            inspection_type="Cycle Inspection / Initial Inspection",
+            inspection_date=datetime.date(2019, 5, 16),
+            score=18,
+            grade_id=grade_a.id,
+            grade_date=datetime.date(2019, 5, 16)),
+        models.Inspection(
+            restaurant_id=wendys1.id,
+            inspection_type="Cycle Inspection / Initial Inspection",
+            inspection_date=datetime.date(2019, 5, 15),
+            score=20,
+            grade_id=grade_b.id,
+            grade_date=datetime.date(2019, 5, 15)),
+        models.Inspection(
+            restaurant_id=riviera.id,
+            inspection_type="Cycle Inspection / Initial Inspection",
+            inspection_date=datetime.date(2019, 5, 16),
+            score=14,
+            grade_id=None,
+            grade_date=None),
+        models.Inspection(
+            restaurant_id=riviera.id,
+            inspection_type="Cycle Inspection / Initial Inspection",
+            inspection_date=datetime.date(2019, 5, 14),
+            score=25,
+            grade_id=grade_c.id,
+            grade_date=datetime.date(2019, 5, 14)),
+        models.Inspection(
+            restaurant_id=wendys2.id,
+            inspection_type="Cycle Inspection / Initial Inspection",
+            inspection_date=datetime.date(2019, 5, 16),
+            score=5,
+            grade_id=grade_a.id,
+            grade_date=datetime.date(2019, 5, 16))
+        ]
+    for i, inspection in enumerate(inspections):
+        assert inspection.restaurant_id == expected_inspections[i].restaurant_id
+        assert inspection.inspection_type == expected_inspections[i].inspection_type
+        assert inspection.inspection_date == expected_inspections[i].inspection_date
+        assert inspection.score == expected_inspections[i].score
+        assert inspection.grade_id == expected_inspections[i].grade_id
+        assert inspection.grade_date == expected_inspections[i].grade_date
