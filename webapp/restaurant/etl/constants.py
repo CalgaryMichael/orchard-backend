@@ -1,6 +1,6 @@
 import enum
 
-BATCH_SIZE = 1000
+BATCH_SIZE = 150
 
 
 class Headers(enum.Enum):

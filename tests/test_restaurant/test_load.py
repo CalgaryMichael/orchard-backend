@@ -46,7 +46,7 @@ def test_load_restaurants():
 def test_load_restaurants__empty_list():
     assert models.Restaurant.objects.all().count() == 0
     unloaded = []
-    load.load_restaurants(unloaded)
+    load.load_restaurants(iter(unloaded))
     assert models.Restaurant.objects.all().count() == 0
 
 
@@ -90,7 +90,7 @@ def test_load_restaurant_contacts():
 def test_load_restaurant_contacts__empty_list():
     assert models.RestaurantContact.objects.all().count() == 0
     unloaded = []
-    load.load_restaurant_contacts(unloaded)
+    load.load_restaurant_contacts(iter(unloaded))
     assert models.RestaurantContact.objects.all().count() == 0
 
 
@@ -101,7 +101,7 @@ def test_load_grades():
         models.Grade(slug="a", label="A"),
         models.Grade(slug="b", label="B"),
         models.Grade(slug="c", label="C")]
-    load.load_grades(unloaded)
+    load.load_grades(iter(unloaded))
     assert models.Grade.objects.all().count() == 3
 
 
@@ -109,7 +109,7 @@ def test_load_grades():
 def test_load_grades__empty_list():
     assert models.Grade.objects.all().count() == 0
     unloaded = []
-    load.load_grades(unloaded)
+    load.load_grades(iter(unloaded))
     assert models.Grade.objects.all().count() == 0
 
 
@@ -123,7 +123,7 @@ def test_load_inspection_types():
         models.InspectionType(
             slug="smoke-free-air-act-re-inspection",
             description="Smoke-Free Air Act / Re-inspection")]
-    load.load_inspection_types(unloaded)
+    load.load_inspection_types(iter(unloaded))
     assert models.InspectionType.objects.all().count() == 2
 
 
@@ -131,7 +131,7 @@ def test_load_inspection_types():
 def test_load_inspection_types__empty_list():
     assert models.InspectionType.objects.all().count() == 0
     unloaded = []
-    load.load_inspection_types(unloaded)
+    load.load_inspection_types(iter(unloaded))
     assert models.InspectionType.objects.all().count() == 0
 
 
@@ -202,7 +202,7 @@ def test_load_inspections():
 def test_load_inspections__empty_list():
     assert models.Inspection.objects.all().count() == 0
     unloaded = []
-    load.load_inspections(unloaded)
+    load.load_inspections(iter(unloaded))
     assert models.Inspection.objects.all().count() == 0
 
 
@@ -249,7 +249,7 @@ def test_load_violations():
             description=description,
             critical_rating=choices.CriticalRating.NOT_CRITICAL.value)
     ]
-    load.load_violations(unloaded)
+    load.load_violations(iter(unloaded))
     assert models.Violation.objects.all().count() == 4
     assert models.Violation.objects.filter(inspection=inspect1).count() == 1
     assert models.Violation.objects.filter(inspection=inspect2).count() == 1

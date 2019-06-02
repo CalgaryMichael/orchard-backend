@@ -4,8 +4,10 @@ from . import constants
 
 
 def chunk(gen):
-    batch = list(itertools.islice(gen, constants.BATCH_SIZE))
-    if batch:
+    while True:
+        batch = list(itertools.islice(gen, constants.BATCH_SIZE))
+        if not batch:
+            break
         yield batch
 
 
