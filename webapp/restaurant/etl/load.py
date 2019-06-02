@@ -15,9 +15,18 @@ def load_restaurant_types(restaurant_types):
 
 
 def load_restaurants(restaurants):
+    """Load Restaurant objects into database"""
     loaded = list()
     for batch in chunk(restaurants):
         loaded += models.Restaurant.objects.bulk_create(batch, constants.BATCH_SIZE)
+    return loaded
+
+
+def load_restaurant_contacts(contacts):
+    """Load RestaurantContact objects into database"""
+    loaded = list()
+    for batch in chunk(contacts):
+        loaded += models.RestaurantContact.objects.bulk_create(batch, constants.BATCH_SIZE)
     return loaded
 
 

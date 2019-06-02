@@ -50,6 +50,50 @@ def test_load_restaurants__empty_list():
 
 
 @pytest.mark.django_db
+def test_load_restaurant_contacts():
+    morris = utils.create_restaurant("30075445", "MORRIS PARK BAKE SHOP", "bakery")
+    wendys = utils.create_restaurant("30112340", "WENDY'S", "hamburgers")
+    riviera = utils.create_restaurant("40356018", "RIVIERA CATERERS", "american")
+
+    assert models.RestaurantContact.objects.all().count() == 0
+    unloaded = [
+        models.RestaurantContact(
+            restaurant_id=morris.id,
+            boro="BRONX",
+            building_number=1007,
+            street="MORRIS PARK AVE",
+            zip_code="10462",
+            phone="7188924968"),
+        models.RestaurantContact(
+            restaurant_id=wendys.id,
+            boro="BROOKLYN",
+            building_number=469,
+            street="FLATBUSH AVENUE",
+            zip_code="11225",
+            phone="7182875005"),
+        models.RestaurantContact(
+            restaurant_id=riviera.id,
+            boro="BROOKLYN",
+            building_number=2780,
+            street="STILLWELL AVENUE",
+            zip_code="11224",
+            phone="7183723031")]
+    load.load_restaurant_contacts(iter(unloaded))
+    assert models.RestaurantContact.objects.all().count() == 3
+    assert models.RestaurantContact.objects.filter(restaurant=morris).count() == 1
+    assert models.RestaurantContact.objects.filter(restaurant=wendys).count() == 1
+    assert models.RestaurantContact.objects.filter(restaurant=riviera).count() == 1
+
+
+@pytest.mark.django_db
+def test_load_restaurant_contacts__empty_list():
+    assert models.RestaurantContact.objects.all().count() == 0
+    unloaded = []
+    load.load_restaurant_contacts(unloaded)
+    assert models.RestaurantContact.objects.all().count() == 0
+
+
+@pytest.mark.django_db
 def test_load_grades():
     assert models.Grade.objects.all().count() == 0
     unloaded = [

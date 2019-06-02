@@ -20,7 +20,8 @@ def test_extract_restaurants():
     csv = pd.DataFrame.from_dict({
         Headers.RESTAURANT_CODES: ["30075445", "30112340", "40356018", "40356018", "40361618"],
         Headers.RESTAURANT_NAME: ["MORRIS PARK BAKE SHOP", "WENDY'S", "RIVIERA CATERERS", "RIVIERA CATERERS", "WENDY'S"],
-        Headers.RESTAURANT_TYPES: ["Bakery", "Hamburgers", "American", "America", "Hamburgers"]
+        Headers.RESTAURANT_TYPES: ["Bakery", "Hamburgers", "American", "America", "Hamburgers"],
+        Headers.BORO: ["BRONX", "BROOKLYN", "BROOKLYN", "BROOKLYN", "MANHATTAN"]
     })
     restaurants = extract._extract_restaurants(csv)
     expected_data = [
@@ -55,6 +56,66 @@ def test_extract_restaurants__empty():
         Headers.RESTAURANT_TYPES: []
     })
     restaurants = extract._extract_restaurants(csv)
+    expected_data = []
+    assert restaurants == expected_data
+
+
+def test_extract_restaurant_contacts():
+    csv = pd.DataFrame.from_dict({
+        Headers.RESTAURANT_CODES: ["30075445", "30112340", "40356018", "40356018", "40061600"],
+        Headers.BORO: ["BRONX", "BROOKLYN", "BROOKLYN", "BROOKLYN", "MANHATTAN"],
+        Headers.BUILDING: [1007, 469, 2780, 2780, 335],
+        Headers.STREET: ["MORRIS PARK AVE", "FLATBUSH AVENUE", "STILLWELL AVENUE", "STILLWELL AVENUE", "5 AVENUE"],
+        Headers.ZIP_CODE: ["10462", "11225", "11224", "11224", "10016"],
+        Headers.PHONE: ["7188924968", "7182875005", "7183723031", "7183723031", "7185554321"]
+    })
+    restaurants = extract._extract_restaurant_contacts(csv)
+    expected_data = [
+        {
+            Headers.RESTAURANT_CODES: "30075445",
+            Headers.BORO: "BRONX",
+            Headers.BUILDING: 1007,
+            Headers.STREET: "MORRIS PARK AVE",
+            Headers.ZIP_CODE: "10462",
+            Headers.PHONE: "7188924968"
+        },
+        {
+            Headers.RESTAURANT_CODES: "30112340",
+            Headers.BORO: "BROOKLYN",
+            Headers.BUILDING: 469,
+            Headers.STREET: "FLATBUSH AVENUE",
+            Headers.ZIP_CODE: "11225",
+            Headers.PHONE: "7182875005"
+        },
+        {
+            Headers.RESTAURANT_CODES: "40356018",
+            Headers.BORO: "BROOKLYN",
+            Headers.BUILDING: 2780,
+            Headers.STREET: "STILLWELL AVENUE",
+            Headers.ZIP_CODE: "11224",
+            Headers.PHONE: "7183723031"
+        },
+        {
+            Headers.RESTAURANT_CODES: "40061600",
+            Headers.BORO: "MANHATTAN",
+            Headers.BUILDING: 335,
+            Headers.STREET: "5 AVENUE",
+            Headers.ZIP_CODE: "10016",
+            Headers.PHONE: "7185554321"
+        }
+    ]
+    assert restaurants == expected_data
+
+
+def test_extract_restaurant_contacts__empty():
+    csv = pd.DataFrame.from_dict({
+        Headers.RESTAURANT_CODES: [],
+        Headers.BORO: [],
+        Headers.BUILDING: [],
+        Headers.STREET: [],
+        Headers.ZIP_CODE: [],
+        Headers.PHONE: []})
+    restaurants = extract._extract_restaurant_contacts(csv)
     expected_data = []
     assert restaurants == expected_data
 

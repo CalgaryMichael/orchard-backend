@@ -56,6 +56,86 @@ def test_transform_restaurants():
         assert restaurant.restaurant_type_id == expected_restaurants[i].restaurant_type_id
 
 
+@pytest.mark.django_db
+def test_transform_restaurant_contacts():
+    utils.create_restaurant("30075445", "MORRIS PARK BAKE SHOP", "bakery")
+    utils.create_restaurant("30112340", "WENDY'S", "hamburgers")
+    utils.create_restaurant("40356018", "RIVIERA CATERERS", "american")
+    utils.create_restaurant("40061600", "WENDY'S", "hamburgers")
+
+    untransformed = [
+        {
+            Headers.RESTAURANT_CODES: "30075445",
+            Headers.BORO: "BRONX",
+            Headers.BUILDING: 1007,
+            Headers.STREET: "MORRIS PARK AVE",
+            Headers.ZIP_CODE: "10462",
+            Headers.PHONE: "7188924968"
+        },
+        {
+            Headers.RESTAURANT_CODES: "30112340",
+            Headers.BORO: "BROOKLYN",
+            Headers.BUILDING: 469,
+            Headers.STREET: "FLATBUSH AVENUE",
+            Headers.ZIP_CODE: "11225",
+            Headers.PHONE: "7182875005"
+        },
+        {
+            Headers.RESTAURANT_CODES: "40356018",
+            Headers.BORO: "BROOKLYN",
+            Headers.BUILDING: 2780,
+            Headers.STREET: "STILLWELL AVENUE",
+            Headers.ZIP_CODE: "11224",
+            Headers.PHONE: "7183723031"
+        },
+        {
+            Headers.RESTAURANT_CODES: "40061600",
+            Headers.BORO: "MANHATTAN",
+            Headers.BUILDING: 335,
+            Headers.STREET: "5 AVENUE",
+            Headers.ZIP_CODE: "10016",
+            Headers.PHONE: "7185554321"
+        }
+    ]
+    restaurant_contacts = transform._transform_restaurant_contacts(untransformed)
+    expected_contacts = [
+        models.RestaurantContact(
+            restaurant_id=1,
+            boro="BRONX",
+            building_number=1007,
+            street="MORRIS PARK AVE",
+            zip_code="10462",
+            phone="7188924968"),
+        models.RestaurantContact(
+            restaurant_id=2,
+            boro="BROOKLYN",
+            building_number=469,
+            street="FLATBUSH AVENUE",
+            zip_code="11225",
+            phone="7182875005"),
+        models.RestaurantContact(
+            restaurant_id=3,
+            boro="BROOKLYN",
+            building_number=2780,
+            street="STILLWELL AVENUE",
+            zip_code="11224",
+            phone="7183723031"),
+        models.RestaurantContact(
+            restaurant_id=4,
+            boro="MANHATTAN",
+            building_number=335,
+            street="5 AVENUE",
+            zip_code="10016",
+            phone="7185554321")]
+    for i, contact in enumerate(restaurant_contacts):
+        assert contact.boro == expected_contacts[i].boro
+        assert contact.building_number == expected_contacts[i].building_number
+        assert contact.street == expected_contacts[i].street
+        assert contact.zip_code == expected_contacts[i].zip_code
+        assert contact.phone == expected_contacts[i].phone
+        assert contact.restaurant_id == expected_contacts[i].restaurant_id
+
+
 def test_transform_grades():
     untransformed = ["A", "B", "C", "P", "G", "Z"]
     grades = transform._transform_grades(untransformed)

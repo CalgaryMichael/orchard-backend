@@ -21,6 +21,22 @@ def _transform_restaurants(restaurants):
     return (models.Restaurant(**restaurant) for restaurant in restaurant_mapping)
 
 
+def _transform_restaurant_contacts(contacts):
+    """Returns a generator of normalized Restaurant objects"""
+    contact_mapping = list()
+    restaurant_mapping = dict(models.Restaurant.objects.all().values_list("code", "id"))
+    for contact in contacts:
+        restaurant = contact[Headers.RESTAURANT_CODES]
+        contact_mapping.append({
+            "restaurant_id": restaurant_mapping[restaurant],
+            "boro": contact[Headers.BORO],
+            "building_number": contact[Headers.BUILDING],
+            "street": contact[Headers.STREET],
+            "zip_code": contact[Headers.ZIP_CODE],
+            "phone": contact[Headers.PHONE]})
+    return (models.RestaurantContact(**contact) for contact in contact_mapping)
+
+
 def _transform_grades(grade_list):
     """Returns a generator of normalized Grade objects"""
     return (models.Grade(slug=slugify(g), label=g) for g in grade_list)

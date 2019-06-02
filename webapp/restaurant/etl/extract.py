@@ -12,7 +12,21 @@ def _extract_restaurant_types(csv):
 
 def _extract_restaurants(csv):
     """Normalize data for Restaurant model transformation"""
-    restaurants = csv.drop_duplicates(subset=Headers.RESTAURANT_CODES, keep="first")
+    columns = [Headers.RESTAURANT_CODES, Headers.RESTAURANT_NAME, Headers.RESTAURANT_TYPES]
+    restaurants = csv[columns].drop_duplicates(subset=Headers.RESTAURANT_CODES, keep="first")
+    return restaurants.to_dict(orient="records")
+
+
+def _extract_restaurant_contacts(csv):
+    """Normalize data for RestaurantContact model transformation"""
+    columns = [
+        Headers.RESTAURANT_CODES,
+        Headers.BORO,
+        Headers.BUILDING,
+        Headers.STREET,
+        Headers.ZIP_CODE,
+        Headers.PHONE]
+    restaurants = csv[columns].drop_duplicates(subset=Headers.RESTAURANT_CODES, keep="first")
     return restaurants.to_dict(orient="records")
 
 
