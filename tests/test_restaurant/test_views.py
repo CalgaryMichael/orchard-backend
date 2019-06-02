@@ -28,6 +28,7 @@ def _create_restaurant1():
         date=date + datetime.timedelta(days=30),
         grade_slug="a",
         score=10)
+    return restaurant
 
 
 def _create_restaurant2():
@@ -46,15 +47,16 @@ def _create_restaurant2():
         date=date,
         grade_slug="b",
         score=20)
+    return restaurant
 
 
 @pytest.mark.django_db
 def test_restaurant_view_set__list__single_restaurant(client):
-    _create_restaurant1()
+    restaurant = _create_restaurant1()
     response = client.get(reverse("restaurant-list"))
     expected_data = [
         {
-            "id": 1,
+            "id": restaurant.id,
             "code": "30004700",
             "name": "WENDY'S",
             "restaurant_type": "Hamburgers",
@@ -89,13 +91,13 @@ def test_restaurant_view_set__list__single_restaurant(client):
 
 @pytest.mark.django_db
 def test_restaurant_view_set__list__multiple_restaurants(client):
-    _create_restaurant1()
-    _create_restaurant2()
+    restaurant1 = _create_restaurant1()
+    restaurant2 = _create_restaurant2()
 
     response = client.get(reverse("restaurant-list"))
     expected_data = [
         {
-            "id": 1,
+            "id": restaurant1.id,
             "code": "30004700",
             "name": "WENDY'S",
             "restaurant_type": "Hamburgers",
@@ -124,7 +126,7 @@ def test_restaurant_view_set__list__multiple_restaurants(client):
             ]
         },
         {
-            "id": 2,
+            "id": restaurant2.id,
             "code": "30075445",
             "name": "MORRIS PARK BAKE SHOP",
             "restaurant_type": "Bakery",

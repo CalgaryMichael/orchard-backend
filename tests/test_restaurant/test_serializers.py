@@ -78,7 +78,7 @@ def test_restaurant_serializer__no_inspections():
         phone="4445554444")
     serializer = serializers.RestaurantSerializer(restaurant)
     expected_data = {
-        "id": 1,
+        "id": restaurant.id,
         "code": "30004700",
         "name": "WENDY'S",
         "restaurant_type": "Hamburgers",
@@ -111,7 +111,7 @@ def test_restaurant_serializer__one_inspection():
         score=14)
     serializer = serializers.RestaurantSerializer(restaurant)
     expected_data = {
-        "id": 1,
+        "id": restaurant.id,
         "code": "30004700",
         "name": "WENDY'S",
         "restaurant_type": "Hamburgers",
@@ -159,7 +159,7 @@ def test_restaurant_serializer__multiple_inspections():
         score=10)
     serializer = serializers.RestaurantSerializer(restaurant)
     expected_data = {
-        "id": 1,
+        "id": restaurant.id,
         "code": "30004700",
         "name": "WENDY'S",
         "restaurant_type": "Hamburgers",

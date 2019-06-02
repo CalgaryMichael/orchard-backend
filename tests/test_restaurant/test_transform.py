@@ -19,9 +19,9 @@ def test_transform_restaurant_types():
 
 @pytest.mark.django_db
 def test_transform_restaurants():
-    utils.create_restaurant_type("bakery")
-    utils.create_restaurant_type("hamburgers")
-    utils.create_restaurant_type("american")
+    bakery = utils.create_restaurant_type("bakery")
+    hamburgers = utils.create_restaurant_type("hamburgers")
+    american = utils.create_restaurant_type("american")
 
     untransformed = [
         {
@@ -47,10 +47,10 @@ def test_transform_restaurants():
     ]
     restaurants = transform.transform_restaurants(untransformed)
     expected_restaurants = [
-        models.Restaurant(code="30075445", name="MORRIS PARK BAKE SHOP", restaurant_type_id=1),
-        models.Restaurant(code="30112340", name="WENDY'S", restaurant_type_id=2),
-        models.Restaurant(code="40356018", name="RIVIERA CATERERS", restaurant_type_id=3),
-        models.Restaurant(code="40361618", name="WENDY'S", restaurant_type_id=2)]
+        models.Restaurant(code="30075445", name="MORRIS PARK BAKE SHOP", restaurant_type_id=bakery.id),
+        models.Restaurant(code="30112340", name="WENDY'S", restaurant_type_id=hamburgers.id),
+        models.Restaurant(code="40356018", name="RIVIERA CATERERS", restaurant_type_id=american.id),
+        models.Restaurant(code="40361618", name="WENDY'S", restaurant_type_id=hamburgers.id)]
     for i, restaurant in enumerate(restaurants):
         assert restaurant.code == expected_restaurants[i].code
         assert restaurant.name == expected_restaurants[i].name
@@ -59,10 +59,10 @@ def test_transform_restaurants():
 
 @pytest.mark.django_db
 def test_transform_restaurant_contacts():
-    utils.create_restaurant("30075445", "MORRIS PARK BAKE SHOP", "bakery")
-    utils.create_restaurant("30112340", "WENDY'S", "hamburgers")
-    utils.create_restaurant("40356018", "RIVIERA CATERERS", "american")
-    utils.create_restaurant("40061600", "WENDY'S", "hamburgers")
+    restaurant1 = utils.create_restaurant("30075445", "MORRIS PARK BAKE SHOP", "bakery")
+    restaurant2 = utils.create_restaurant("30112340", "WENDY'S", "hamburgers")
+    restaurant3 = utils.create_restaurant("40356018", "RIVIERA CATERERS", "american")
+    restaurant4 = utils.create_restaurant("40061600", "WENDY'S", "hamburgers")
 
     untransformed = [
         {
@@ -101,28 +101,28 @@ def test_transform_restaurant_contacts():
     restaurant_contacts = transform.transform_restaurant_contacts(untransformed)
     expected_contacts = [
         models.RestaurantContact(
-            restaurant_id=1,
+            restaurant_id=restaurant1.id,
             boro="BRONX",
             building_number=1007,
             street="MORRIS PARK AVE",
             zip_code="10462",
             phone="7188924968"),
         models.RestaurantContact(
-            restaurant_id=2,
+            restaurant_id=restaurant2.id,
             boro="BROOKLYN",
             building_number=469,
             street="FLATBUSH AVENUE",
             zip_code="11225",
             phone="7182875005"),
         models.RestaurantContact(
-            restaurant_id=3,
+            restaurant_id=restaurant3.id,
             boro="BROOKLYN",
             building_number=2780,
             street="STILLWELL AVENUE",
             zip_code="11224",
             phone="7183723031"),
         models.RestaurantContact(
-            restaurant_id=4,
+            restaurant_id=restaurant4.id,
             boro="MANHATTAN",
             building_number=335,
             street="5 AVENUE",
