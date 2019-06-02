@@ -158,33 +158,33 @@ def test_extract_inspections():
     csv = pd.DataFrame.from_dict({
         Headers.RESTAURANT_CODES.value: ["30075445", "30112340", "40356018", "40356018", "40061600"],
         Headers.INSPECTION_TYPE.value: ["Cycle Inspection / Initial Inspection"] * 5,
-        Headers.INSPECTION_DATE.value: ["5/16/2019", "5/15/2019", "5/16/2019", "5/14/2019", "5/16/2019"],
+        Headers.INSPECTION_DATE.value: ["5/16/19", "5/15/19", "5/16/19", "5/14/19", "5/16/19"],
         Headers.INSPECTION_SCORE.value: [18, 20, 14, 25, 5],
         Headers.GRADES.value: ["A", "B", None, "C", "A"],
-        Headers.GRADE_DATE.value: ["5/16/2019", "5/15/2019", None, "5/14/2019", "5/16/2019"]
+        Headers.GRADE_DATE.value: ["5/16/19", "5/15/19", None, "5/14/19", "5/16/19"]
     })
     inspections = extract.extract_inspections(csv)
     expected_data = [
         {
             Headers.RESTAURANT_CODES.value: "30075445",
             Headers.INSPECTION_TYPE.value: "Cycle Inspection / Initial Inspection",
-            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.INSPECTION_DATE.value: "5/16/19",
             Headers.INSPECTION_SCORE.value: 18,
             Headers.GRADES.value: "A",
-            Headers.GRADE_DATE.value: "5/16/2019"
+            Headers.GRADE_DATE.value: "5/16/19"
         },
         {
             Headers.RESTAURANT_CODES.value: "30112340",
             Headers.INSPECTION_TYPE.value: "Cycle Inspection / Initial Inspection",
-            Headers.INSPECTION_DATE.value: "5/15/2019",
+            Headers.INSPECTION_DATE.value: "5/15/19",
             Headers.INSPECTION_SCORE.value: 20,
             Headers.GRADES.value: "B",
-            Headers.GRADE_DATE.value: "5/15/2019"
+            Headers.GRADE_DATE.value: "5/15/19"
         },
         {
             Headers.RESTAURANT_CODES.value: "40356018",
             Headers.INSPECTION_TYPE.value: "Cycle Inspection / Initial Inspection",
-            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.INSPECTION_DATE.value: "5/16/19",
             Headers.INSPECTION_SCORE.value: 14,
             Headers.GRADES.value: None,
             Headers.GRADE_DATE.value: None
@@ -192,18 +192,18 @@ def test_extract_inspections():
         {
             Headers.RESTAURANT_CODES.value: "40356018",
             Headers.INSPECTION_TYPE.value: "Cycle Inspection / Initial Inspection",
-            Headers.INSPECTION_DATE.value: "5/14/2019",
+            Headers.INSPECTION_DATE.value: "5/14/19",
             Headers.INSPECTION_SCORE.value: 25,
             Headers.GRADES.value: "C",
-            Headers.GRADE_DATE.value: "5/14/2019"
+            Headers.GRADE_DATE.value: "5/14/19"
         },
         {
             Headers.RESTAURANT_CODES.value: "40061600",
             Headers.INSPECTION_TYPE.value: "Cycle Inspection / Initial Inspection",
-            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.INSPECTION_DATE.value: "5/16/19",
             Headers.INSPECTION_SCORE.value: 5,
             Headers.GRADES.value: "A",
-            Headers.GRADE_DATE.value: "5/16/2019"
+            Headers.GRADE_DATE.value: "5/16/19"
         }
     ]
     assert inspections == expected_data
@@ -213,10 +213,10 @@ def test_extract_inspections__multiple_violations():
     csv = pd.DataFrame.from_dict({
         Headers.RESTAURANT_CODES.value: ["30075445", "30075445", "40356018", "40356018"],
         Headers.INSPECTION_TYPE.value: ["Cycle Inspection / Initial Inspection"] * 4,
-        Headers.INSPECTION_DATE.value: ["5/16/2019", "5/15/2019", "5/16/2019", "5/16/2019"],
+        Headers.INSPECTION_DATE.value: ["5/16/19", "5/15/19", "5/16/19", "5/16/19"],
         Headers.INSPECTION_SCORE.value: [18, 20, 25, 25],
         Headers.GRADES.value: ["A", None, "C", "C"],
-        Headers.GRADE_DATE.value: ["5/16/2019", None, "5/16/2019", "5/16/2019"],
+        Headers.GRADE_DATE.value: ["5/16/19", None, "5/16/19", "5/16/19"],
         Headers.VIOLATION_CODE.value: ["04J", "08A", "10F", "06D"]
     })
     inspections = extract.extract_inspections(csv)
@@ -224,15 +224,15 @@ def test_extract_inspections__multiple_violations():
         {
             Headers.RESTAURANT_CODES.value: "30075445",
             Headers.INSPECTION_TYPE.value: "Cycle Inspection / Initial Inspection",
-            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.INSPECTION_DATE.value: "5/16/19",
             Headers.INSPECTION_SCORE.value: 18,
             Headers.GRADES.value: "A",
-            Headers.GRADE_DATE.value: "5/16/2019"
+            Headers.GRADE_DATE.value: "5/16/19"
         },
         {
             Headers.RESTAURANT_CODES.value: "30075445",
             Headers.INSPECTION_TYPE.value: "Cycle Inspection / Initial Inspection",
-            Headers.INSPECTION_DATE.value: "5/15/2019",
+            Headers.INSPECTION_DATE.value: "5/15/19",
             Headers.INSPECTION_SCORE.value: 20,
             Headers.GRADES.value: None,
             Headers.GRADE_DATE.value: None
@@ -240,10 +240,10 @@ def test_extract_inspections__multiple_violations():
         {
             Headers.RESTAURANT_CODES.value: "40356018",
             Headers.INSPECTION_TYPE.value: "Cycle Inspection / Initial Inspection",
-            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.INSPECTION_DATE.value: "5/16/19",
             Headers.INSPECTION_SCORE.value: 25,
             Headers.GRADES.value: "C",
-            Headers.GRADE_DATE.value: "5/16/2019"
+            Headers.GRADE_DATE.value: "5/16/19"
         }
     ]
     assert inspections == expected_data
@@ -281,7 +281,7 @@ def test_extract_violations():
     violation_description = "Evidence of mice or live mice present in facility's food and/or non-food areas."
     csv = pd.DataFrame.from_dict({
         Headers.RESTAURANT_CODES.value: ["30075445", "30075445", "40356018", "40356018"],
-        Headers.INSPECTION_DATE.value: ["5/16/2019", "5/15/2019", "5/16/2019", "5/16/2019"],
+        Headers.INSPECTION_DATE.value: ["5/16/19", "5/15/19", "5/16/19", "5/16/19"],
         Headers.VIOLATION_CODE.value: ["04J", "08A", "10F", "06D"],
         Headers.VIOLATION_DESCRIPTION.value: [violation_description] * 4,
         Headers.CRITICAL_RATING.value: ["Critical", "Critical", "Critical", "Not Critical"]
@@ -290,28 +290,28 @@ def test_extract_violations():
     expected_violations = [
         {
             Headers.RESTAURANT_CODES.value: "30075445",
-            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.INSPECTION_DATE.value: "5/16/19",
             Headers.VIOLATION_CODE.value: "04J",
             Headers.VIOLATION_DESCRIPTION.value: violation_description,
             Headers.CRITICAL_RATING.value: "Critical"
         },
         {
             Headers.RESTAURANT_CODES.value: "30075445",
-            Headers.INSPECTION_DATE.value: "5/15/2019",
+            Headers.INSPECTION_DATE.value: "5/15/19",
             Headers.VIOLATION_CODE.value: "08A",
             Headers.VIOLATION_DESCRIPTION.value: violation_description,
             Headers.CRITICAL_RATING.value: "Critical"
         },
         {
             Headers.RESTAURANT_CODES.value: "40356018",
-            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.INSPECTION_DATE.value: "5/16/19",
             Headers.VIOLATION_CODE.value: "10F",
             Headers.VIOLATION_DESCRIPTION.value: violation_description,
             Headers.CRITICAL_RATING.value: "Critical"
         },
         {
             Headers.RESTAURANT_CODES.value: "40356018",
-            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.INSPECTION_DATE.value: "5/16/19",
             Headers.VIOLATION_CODE.value: "06D",
             Headers.VIOLATION_DESCRIPTION.value: violation_description,
             Headers.CRITICAL_RATING.value: "Not Critical"

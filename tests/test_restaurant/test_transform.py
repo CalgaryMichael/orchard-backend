@@ -186,23 +186,23 @@ def test_transform_inspections():
         {
             Headers.RESTAURANT_CODES.value: "30075445",
             Headers.INSPECTION_TYPE.value: "Cycle Inspection / Initial Inspection",
-            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.INSPECTION_DATE.value: "5/16/19",
             Headers.INSPECTION_SCORE.value: 18,
             Headers.GRADES.value: "A",
-            Headers.GRADE_DATE.value: "5/16/2019"
+            Headers.GRADE_DATE.value: "5/16/19"
         },
         {
             Headers.RESTAURANT_CODES.value: "30112340",
             Headers.INSPECTION_TYPE.value: "Cycle Inspection / Initial Inspection",
-            Headers.INSPECTION_DATE.value: "5/15/2019",
+            Headers.INSPECTION_DATE.value: "5/15/19",
             Headers.INSPECTION_SCORE.value: 20,
             Headers.GRADES.value: "B",
-            Headers.GRADE_DATE.value: "5/15/2019"
+            Headers.GRADE_DATE.value: "5/15/19"
         },
         {
             Headers.RESTAURANT_CODES.value: "40356018",
             Headers.INSPECTION_TYPE.value: "Cycle Inspection / Initial Inspection",
-            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.INSPECTION_DATE.value: "5/16/19",
             Headers.INSPECTION_SCORE.value: 14,
             Headers.GRADES.value: None,
             Headers.GRADE_DATE.value: None
@@ -210,18 +210,18 @@ def test_transform_inspections():
         {
             Headers.RESTAURANT_CODES.value: "40356018",
             Headers.INSPECTION_TYPE.value: "Cycle Inspection / Initial Inspection",
-            Headers.INSPECTION_DATE.value: "5/14/2019",
+            Headers.INSPECTION_DATE.value: "5/14/19",
             Headers.INSPECTION_SCORE.value: 25,
             Headers.GRADES.value: "C",
-            Headers.GRADE_DATE.value: "5/14/2019"
+            Headers.GRADE_DATE.value: "5/14/19"
         },
         {
             Headers.RESTAURANT_CODES.value: "40061600",
             Headers.INSPECTION_TYPE.value: "Cycle Inspection / Initial Inspection",
-            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.INSPECTION_DATE.value: "5/16/19",
             Headers.INSPECTION_SCORE.value: 5,
             Headers.GRADES.value: "A",
-            Headers.GRADE_DATE.value: "5/16/2019"
+            Headers.GRADE_DATE.value: "5/16/19"
         }
     ]
     inspections = transform.transform_inspections(untransformed)
@@ -294,28 +294,28 @@ def test_transform_violations():
     untransformed = [
         {
             Headers.RESTAURANT_CODES.value: "30075445",
-            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.INSPECTION_DATE.value: "5/16/19",
             Headers.VIOLATION_CODE.value: "04J",
             Headers.VIOLATION_DESCRIPTION.value: description,
             Headers.CRITICAL_RATING.value: "Critical"
         },
         {
             Headers.RESTAURANT_CODES.value: "30075445",
-            Headers.INSPECTION_DATE.value: "5/15/2019",
+            Headers.INSPECTION_DATE.value: "5/15/19",
             Headers.VIOLATION_CODE.value: "08A",
             Headers.VIOLATION_DESCRIPTION.value: description,
             Headers.CRITICAL_RATING.value: "Not Applicable"
         },
         {
             Headers.RESTAURANT_CODES.value: "40356018",
-            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.INSPECTION_DATE.value: "5/16/19",
             Headers.VIOLATION_CODE.value: "10F",
             Headers.VIOLATION_DESCRIPTION.value: description,
             Headers.CRITICAL_RATING.value: "Critical"
         },
         {
             Headers.RESTAURANT_CODES.value: "40356018",
-            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.INSPECTION_DATE.value: "5/16/19",
             Headers.VIOLATION_CODE.value: "06D",
             Headers.VIOLATION_DESCRIPTION.value: description,
             Headers.CRITICAL_RATING.value: "Not Critical"
