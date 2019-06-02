@@ -6,12 +6,12 @@ from django.utils.text import slugify
 from . import Headers
 
 
-def _transform_restaurant_types(type_list):
+def transform_restaurant_types(type_list):
     """Returns a generator of normalized RestaurantType objects"""
     return (models.RestaurantType(slug=slugify(t), description=t) for t in type_list)
 
 
-def _transform_restaurants(restaurants):
+def transform_restaurants(restaurants):
     """Returns a generator of normalized Restaurant objects"""
     restaurant_mapping = list()
     type_mapping = dict(models.RestaurantType.objects.all().values_list("slug", "id"))
@@ -24,7 +24,7 @@ def _transform_restaurants(restaurants):
     return (models.Restaurant(**restaurant) for restaurant in restaurant_mapping)
 
 
-def _transform_restaurant_contacts(contacts):
+def transform_restaurant_contacts(contacts):
     """Returns a generator of normalized Restaurant objects"""
     contact_mapping = list()
     restaurant_mapping = dict(models.Restaurant.objects.all().values_list("code", "id"))
@@ -40,7 +40,7 @@ def _transform_restaurant_contacts(contacts):
     return (models.RestaurantContact(**contact) for contact in contact_mapping)
 
 
-def _transform_grades(grade_list):
+def transform_grades(grade_list):
     """Returns a generator of normalized Grade objects"""
     return (models.Grade(slug=slugify(g), label=g) for g in grade_list)
 
@@ -50,7 +50,7 @@ def _convert_date(date_string):
     return datetime.datetime.strptime(date_string, "%m/%d/%Y").date() if date_string else None
 
 
-def _transform_inspections(inspections):
+def transform_inspections(inspections):
     """Returns a generator of normalized Inspection objects"""
     inspection_mapping = list()
     restaurant_mapping = dict(models.Restaurant.objects.all().values_list("code", "id"))
@@ -82,7 +82,7 @@ def _get_inspection_id(inspections, violation):
     return inspection.id.values[0]
 
 
-def _transform_violations(violations):
+def transform_violations(violations):
     """Returns a generator of normalized Inspection objects"""
     violation_mapping = list()
     inspection_mapping = models.Inspection.objects.all().values("id", "inspection_date", "restaurant__code")

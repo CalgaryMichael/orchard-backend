@@ -7,7 +7,7 @@ from . import utils
 
 def test_transform_restaurant_types():
     untransformed = ["Hamburgers", "Thai", "Bakery"]
-    restaurant_types = transform._transform_restaurant_types(untransformed)
+    restaurant_types = transform.transform_restaurant_types(untransformed)
     expected_types = [
         models.RestaurantType(slug="hamburgers", description="Hamburgers"),
         models.RestaurantType(slug="thai", description="Thai"),
@@ -45,7 +45,7 @@ def test_transform_restaurants():
             Headers.RESTAURANT_TYPES: "Hamburgers"
         }
     ]
-    restaurants = transform._transform_restaurants(untransformed)
+    restaurants = transform.transform_restaurants(untransformed)
     expected_restaurants = [
         models.Restaurant(code="30075445", name="MORRIS PARK BAKE SHOP", restaurant_type_id=1),
         models.Restaurant(code="30112340", name="WENDY'S", restaurant_type_id=2),
@@ -98,7 +98,7 @@ def test_transform_restaurant_contacts():
             Headers.PHONE: "7185554321"
         }
     ]
-    restaurant_contacts = transform._transform_restaurant_contacts(untransformed)
+    restaurant_contacts = transform.transform_restaurant_contacts(untransformed)
     expected_contacts = [
         models.RestaurantContact(
             restaurant_id=1,
@@ -139,7 +139,7 @@ def test_transform_restaurant_contacts():
 
 def test_transform_grades():
     untransformed = ["A", "B", "C", "P", "G", "Z"]
-    grades = transform._transform_grades(untransformed)
+    grades = transform.transform_grades(untransformed)
     expected_grades = [
         models.Grade(slug="a", label="A"),
         models.Grade(slug="b", label="B"),
@@ -207,7 +207,7 @@ def test_transform_inspections():
             Headers.GRADE_DATE: "5/16/2019"
         }
     ]
-    inspections = transform._transform_inspections(untransformed)
+    inspections = transform.transform_inspections(untransformed)
     expected_inspections = [
         models.Inspection(
             restaurant_id=morris.id,
@@ -304,7 +304,7 @@ def test_transform_violations():
             Headers.CRITICAL_RATING: "Not Critical"
         }
     ]
-    violations = transform._transform_violations(untransformed)
+    violations = transform.transform_violations(untransformed)
     expected_violations = [
         models.Violation(
             inspection_id=inspect1.id,

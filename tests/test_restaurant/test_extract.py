@@ -5,14 +5,14 @@ from webapp.restaurant.etl import extract, Headers
 def test_extract_restaurant_types():
     csv = pd.DataFrame.from_dict({Headers.RESTAURANT_TYPES: ["Hamburgers", "Bakery", "Hamburgers", "Thai", "thai"]})
     expected_data = ["Hamburgers", "Bakery", "Thai"]
-    restaurant_types = extract._extract_restaurant_types(csv)
+    restaurant_types = extract.extract_restaurant_types(csv)
     assert list(restaurant_types) == expected_data
 
 
 def test_extract_restaurant_types__empty():
     csv = pd.DataFrame.from_dict({Headers.RESTAURANT_TYPES: []})
     expected_data = []
-    restaurant_types = extract._extract_restaurant_types(csv)
+    restaurant_types = extract.extract_restaurant_types(csv)
     assert list(restaurant_types) == expected_data
 
 
@@ -23,7 +23,7 @@ def test_extract_restaurants():
         Headers.RESTAURANT_TYPES: ["Bakery", "Hamburgers", "American", "America", "Hamburgers"],
         Headers.BORO: ["BRONX", "BROOKLYN", "BROOKLYN", "BROOKLYN", "MANHATTAN"]
     })
-    restaurants = extract._extract_restaurants(csv)
+    restaurants = extract.extract_restaurants(csv)
     expected_data = [
         {
             Headers.RESTAURANT_CODES: "30075445",
@@ -55,7 +55,7 @@ def test_extract_restaurants__empty():
         Headers.RESTAURANT_NAME: [],
         Headers.RESTAURANT_TYPES: []
     })
-    restaurants = extract._extract_restaurants(csv)
+    restaurants = extract.extract_restaurants(csv)
     expected_data = []
     assert restaurants == expected_data
 
@@ -69,7 +69,7 @@ def test_extract_restaurant_contacts():
         Headers.ZIP_CODE: ["10462", "11225", "11224", "11224", "10016"],
         Headers.PHONE: ["7188924968", "7182875005", "7183723031", "7183723031", "7185554321"]
     })
-    restaurants = extract._extract_restaurant_contacts(csv)
+    restaurants = extract.extract_restaurant_contacts(csv)
     expected_data = [
         {
             Headers.RESTAURANT_CODES: "30075445",
@@ -115,7 +115,7 @@ def test_extract_restaurant_contacts__empty():
         Headers.STREET: [],
         Headers.ZIP_CODE: [],
         Headers.PHONE: []})
-    restaurants = extract._extract_restaurant_contacts(csv)
+    restaurants = extract.extract_restaurant_contacts(csv)
     expected_data = []
     assert restaurants == expected_data
 
@@ -129,7 +129,7 @@ def test_extract_inspections():
         Headers.GRADES: ["A", "B", None, "C", "A"],
         Headers.GRADE_DATE: ["5/16/2019", "5/15/2019", None, "5/14/2019", "5/16/2019"]
     })
-    inspections = extract._extract_inspections(csv)
+    inspections = extract.extract_inspections(csv)
     expected_data = [
         {
             Headers.RESTAURANT_CODES: "30075445",
@@ -185,7 +185,7 @@ def test_extract_inspections__multiple_violations():
         Headers.GRADE_DATE: ["5/16/2019", None, "5/16/2019", "5/16/2019"],
         Headers.VIOLATION_CODE: ["04J", "08A", "10F", "06D"]
     })
-    inspections = extract._extract_inspections(csv)
+    inspections = extract.extract_inspections(csv)
     expected_data = [
         {
             Headers.RESTAURANT_CODES: "30075445",
@@ -224,7 +224,7 @@ def test_extract_inspections__empty():
         Headers.GRADES: [],
         Headers.GRADE_DATE: []
     })
-    inspections = extract._extract_inspections(csv)
+    inspections = extract.extract_inspections(csv)
     expected_data = []
     assert inspections == expected_data
 
@@ -232,14 +232,14 @@ def test_extract_inspections__empty():
 def test_extract_grades():
     csv = pd.DataFrame.from_dict({Headers.GRADES: ["A", None, "", "B", "C", "", "G", "P", None, "Z"]})
     expected_data = ["A", "B", "C", "G", "P", "Z"]
-    grades = extract._extract_grades(csv)
+    grades = extract.extract_grades(csv)
     assert list(grades) == expected_data
 
 
 def test_extract_grades__empty():
     csv = pd.DataFrame.from_dict({Headers.GRADES: []})
     expected_data = []
-    grades = extract._extract_grades(csv)
+    grades = extract.extract_grades(csv)
     assert list(grades) == expected_data
 
 
@@ -252,7 +252,7 @@ def test_extract_violations():
         Headers.VIOLATION_DESCRIPTION: [violation_description] * 4,
         Headers.CRITICAL_RATING: ["Critical", "Critical", "Critical", "Not Critical"]
     })
-    violations = extract._extract_violations(csv)
+    violations = extract.extract_violations(csv)
     expected_violations = [
         {
             Headers.RESTAURANT_CODES: "30075445",
@@ -295,6 +295,6 @@ def test_extract_violations__empty():
         Headers.VIOLATION_DESCRIPTION: [],
         Headers.CRITICAL_RATING: []
     })
-    violations = extract._extract_violations(csv)
+    violations = extract.extract_violations(csv)
     expected_violations = []
     assert violations == expected_violations
