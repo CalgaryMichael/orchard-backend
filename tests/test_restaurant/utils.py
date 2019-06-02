@@ -14,6 +14,7 @@ def create_restaurant(code, name, type_slug):
 
 
 def create_restaurant_contact(restaurant, boro, building_number=None, street=None, zip_code=None, phone=None):
+    """Helper function for creating a RstaurantContact"""
     return models.RestaurantContact.objects.create(
         restaurant=restaurant,
         boro=boro,
@@ -23,15 +24,23 @@ def create_restaurant_contact(restaurant, boro, building_number=None, street=Non
         phone=phone)
 
 
+def create_inspection_type(description):
+    """Helper function for creating an InspectionType"""
+    return models.InspectionType.objects.create(slug=slugify(description), description=description)
+
+
 def create_inspection(restaurant, inspection_type, date, score, grade_slug=None):
-    """Helper function for creating an Inspection with a Grade"""
+    """Helper function for creating an Inspection with an InspectionType and Grade"""
     grade, grade_date = None, None
     if grade_slug is not None:
         grade, _ = models.Grade.objects.get_or_create(slug=grade_slug, label=grade_slug.title())
         grade_date = date
+    inspetion_type_object, _ = models.InspectionType.objects.get_or_create(
+        slug=slugify(inspection_type),
+        description=inspection_type)
     return models.Inspection.objects.create(
         restaurant=restaurant,
-        inspection_type=inspection_type,
+        inspection_type=inspetion_type_object,
         inspection_date=date,
         score=score,
         grade=grade,
@@ -39,4 +48,5 @@ def create_inspection(restaurant, inspection_type, date, score, grade_slug=None)
 
 
 def create_grade(grade):
+    """Helper funtion for creating a Grade"""
     return models.Grade.objects.create(slug=slugify(grade), label=grade)

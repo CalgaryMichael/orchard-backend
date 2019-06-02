@@ -154,6 +154,8 @@ def test_transform_grades():
 
 @pytest.mark.django_db
 def test_transform_inspections():
+    inspection_type = utils.create_inspection_type("Cycle Inspection / Initial Inspection")
+
     morris = utils.create_restaurant("30075445", "MORRIS PARK BAKE SHOP", "bakery")
     wendys1 = utils.create_restaurant("30112340", "WENDY'S", "hamburgers")
     riviera = utils.create_restaurant("40356018", "RIVIERA CATERERS", "american")
@@ -209,35 +211,35 @@ def test_transform_inspections():
     expected_inspections = [
         models.Inspection(
             restaurant_id=morris.id,
-            inspection_type="Cycle Inspection / Initial Inspection",
+            inspection_type_id=inspection_type.id,
             inspection_date=datetime.date(2019, 5, 16),
             score=18,
             grade_id=grade_a.id,
             grade_date=datetime.date(2019, 5, 16)),
         models.Inspection(
             restaurant_id=wendys1.id,
-            inspection_type="Cycle Inspection / Initial Inspection",
+            inspection_type_id=inspection_type.id,
             inspection_date=datetime.date(2019, 5, 15),
             score=20,
             grade_id=grade_b.id,
             grade_date=datetime.date(2019, 5, 15)),
         models.Inspection(
             restaurant_id=riviera.id,
-            inspection_type="Cycle Inspection / Initial Inspection",
+            inspection_type_id=inspection_type.id,
             inspection_date=datetime.date(2019, 5, 16),
             score=14,
             grade_id=None,
             grade_date=None),
         models.Inspection(
             restaurant_id=riviera.id,
-            inspection_type="Cycle Inspection / Initial Inspection",
+            inspection_type_id=inspection_type.id,
             inspection_date=datetime.date(2019, 5, 14),
             score=25,
             grade_id=grade_c.id,
             grade_date=datetime.date(2019, 5, 14)),
         models.Inspection(
             restaurant_id=wendys2.id,
-            inspection_type="Cycle Inspection / Initial Inspection",
+            inspection_type_id=inspection_type.id,
             inspection_date=datetime.date(2019, 5, 16),
             score=5,
             grade_id=grade_a.id,
@@ -245,7 +247,7 @@ def test_transform_inspections():
         ]
     for i, inspection in enumerate(inspections):
         assert inspection.restaurant_id == expected_inspections[i].restaurant_id
-        assert inspection.inspection_type == expected_inspections[i].inspection_type
+        assert inspection.inspection_type_id == expected_inspections[i].inspection_type_id
         assert inspection.inspection_date == expected_inspections[i].inspection_date
         assert inspection.score == expected_inspections[i].score
         assert inspection.grade_id == expected_inspections[i].grade_id

@@ -54,16 +54,18 @@ def _transform_inspections(inspections):
     inspection_mapping = list()
     restaurant_mapping = dict(models.Restaurant.objects.all().values_list("code", "id"))
     grade_mapping = dict(models.Grade.objects.all().values_list("slug", "id"))
+    type_mapping = dict(models.InspectionType.objects.all().values_list("slug", "id"))
     for inspection in inspections:
         restaurant = inspection[Headers.RESTAURANT_CODES]
         grade = inspection[Headers.GRADES]
+        inspection_type = slugify(inspection[Headers.INSPECTION_TYPE])
         grade_date = inspection[Headers.GRADE_DATE]
         inspection_date = inspection[Headers.INSPECTION_DATE]
         inspection_mapping.append({
             "restaurant_id": restaurant_mapping[restaurant],
             "grade_id": grade_mapping[slugify(grade)] if grade is not None else None,
             "grade_date": _convert_date(grade_date),
-            "inspection_type": inspection[Headers.INSPECTION_TYPE],
+            "inspection_type_id": type_mapping[inspection_type],
             "inspection_date": _convert_date(inspection_date),
             "score": inspection[Headers.INSPECTION_SCORE]})
     return (models.Inspection(**inspection) for inspection in inspection_mapping)
