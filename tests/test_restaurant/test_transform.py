@@ -25,24 +25,24 @@ def test_transform_restaurants():
 
     untransformed = [
         {
-            Headers.RESTAURANT_CODES: "30075445",
-            Headers.RESTAURANT_NAME: "MORRIS PARK BAKE SHOP",
-            Headers.RESTAURANT_TYPES: "Bakery"
+            Headers.RESTAURANT_CODES.value: "30075445",
+            Headers.RESTAURANT_NAME.value: "MORRIS PARK BAKE SHOP",
+            Headers.RESTAURANT_TYPES.value: "Bakery"
         },
         {
-            Headers.RESTAURANT_CODES: "30112340",
-            Headers.RESTAURANT_NAME: "WENDY'S",
-            Headers.RESTAURANT_TYPES: "Hamburgers"
+            Headers.RESTAURANT_CODES.value: "30112340",
+            Headers.RESTAURANT_NAME.value: "WENDY'S",
+            Headers.RESTAURANT_TYPES.value: "Hamburgers"
         },
         {
-            Headers.RESTAURANT_CODES: "40356018",
-            Headers.RESTAURANT_NAME: "RIVIERA CATERERS",
-            Headers.RESTAURANT_TYPES: "American"
+            Headers.RESTAURANT_CODES.value: "40356018",
+            Headers.RESTAURANT_NAME.value: "RIVIERA CATERERS",
+            Headers.RESTAURANT_TYPES.value: "American"
         },
         {
-            Headers.RESTAURANT_CODES: "40361618",
-            Headers.RESTAURANT_NAME: "WENDY'S",
-            Headers.RESTAURANT_TYPES: "Hamburgers"
+            Headers.RESTAURANT_CODES.value: "40361618",
+            Headers.RESTAURANT_NAME.value: "WENDY'S",
+            Headers.RESTAURANT_TYPES.value: "Hamburgers"
         }
     ]
     restaurants = transform.transform_restaurants(untransformed)
@@ -66,36 +66,36 @@ def test_transform_restaurant_contacts():
 
     untransformed = [
         {
-            Headers.RESTAURANT_CODES: "30075445",
-            Headers.BORO: "BRONX",
-            Headers.BUILDING: 1007,
-            Headers.STREET: "MORRIS PARK AVE",
-            Headers.ZIP_CODE: "10462",
-            Headers.PHONE: "7188924968"
+            Headers.RESTAURANT_CODES.value: "30075445",
+            Headers.BORO.value: "BRONX",
+            Headers.BUILDING.value: 1007,
+            Headers.STREET.value: "MORRIS PARK AVE",
+            Headers.ZIP_CODE.value: "10462",
+            Headers.PHONE.value: "7188924968"
         },
         {
-            Headers.RESTAURANT_CODES: "30112340",
-            Headers.BORO: "BROOKLYN",
-            Headers.BUILDING: 469,
-            Headers.STREET: "FLATBUSH AVENUE",
-            Headers.ZIP_CODE: "11225",
-            Headers.PHONE: "7182875005"
+            Headers.RESTAURANT_CODES.value: "30112340",
+            Headers.BORO.value: "BROOKLYN",
+            Headers.BUILDING.value: 469,
+            Headers.STREET.value: "FLATBUSH AVENUE",
+            Headers.ZIP_CODE.value: "11225",
+            Headers.PHONE.value: "7182875005"
         },
         {
-            Headers.RESTAURANT_CODES: "40356018",
-            Headers.BORO: "BROOKLYN",
-            Headers.BUILDING: 2780,
-            Headers.STREET: "STILLWELL AVENUE",
-            Headers.ZIP_CODE: "11224",
-            Headers.PHONE: "7183723031"
+            Headers.RESTAURANT_CODES.value: "40356018",
+            Headers.BORO.value: "BROOKLYN",
+            Headers.BUILDING.value: 2780,
+            Headers.STREET.value: "STILLWELL AVENUE",
+            Headers.ZIP_CODE.value: "11224",
+            Headers.PHONE.value: "7183723031"
         },
         {
-            Headers.RESTAURANT_CODES: "40061600",
-            Headers.BORO: "MANHATTAN",
-            Headers.BUILDING: 335,
-            Headers.STREET: "5 AVENUE",
-            Headers.ZIP_CODE: "10016",
-            Headers.PHONE: "7185554321"
+            Headers.RESTAURANT_CODES.value: "40061600",
+            Headers.BORO.value: "MANHATTAN",
+            Headers.BUILDING.value: 335,
+            Headers.STREET.value: "5 AVENUE",
+            Headers.ZIP_CODE.value: "10016",
+            Headers.PHONE.value: "7185554321"
         }
     ]
     restaurant_contacts = transform.transform_restaurant_contacts(untransformed)
@@ -184,44 +184,44 @@ def test_transform_inspections():
 
     untransformed = [
         {
-            Headers.RESTAURANT_CODES: "30075445",
-            Headers.INSPECTION_TYPE: "Cycle Inspection / Initial Inspection",
-            Headers.INSPECTION_DATE: "5/16/2019",
-            Headers.INSPECTION_SCORE: 18,
-            Headers.GRADES: "A",
-            Headers.GRADE_DATE: "5/16/2019"
+            Headers.RESTAURANT_CODES.value: "30075445",
+            Headers.INSPECTION_TYPE.value: "Cycle Inspection / Initial Inspection",
+            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.INSPECTION_SCORE.value: 18,
+            Headers.GRADES.value: "A",
+            Headers.GRADE_DATE.value: "5/16/2019"
         },
         {
-            Headers.RESTAURANT_CODES: "30112340",
-            Headers.INSPECTION_TYPE: "Cycle Inspection / Initial Inspection",
-            Headers.INSPECTION_DATE: "5/15/2019",
-            Headers.INSPECTION_SCORE: 20,
-            Headers.GRADES: "B",
-            Headers.GRADE_DATE: "5/15/2019"
+            Headers.RESTAURANT_CODES.value: "30112340",
+            Headers.INSPECTION_TYPE.value: "Cycle Inspection / Initial Inspection",
+            Headers.INSPECTION_DATE.value: "5/15/2019",
+            Headers.INSPECTION_SCORE.value: 20,
+            Headers.GRADES.value: "B",
+            Headers.GRADE_DATE.value: "5/15/2019"
         },
         {
-            Headers.RESTAURANT_CODES: "40356018",
-            Headers.INSPECTION_TYPE: "Cycle Inspection / Initial Inspection",
-            Headers.INSPECTION_DATE: "5/16/2019",
-            Headers.INSPECTION_SCORE: 14,
-            Headers.GRADES: None,
-            Headers.GRADE_DATE: None
+            Headers.RESTAURANT_CODES.value: "40356018",
+            Headers.INSPECTION_TYPE.value: "Cycle Inspection / Initial Inspection",
+            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.INSPECTION_SCORE.value: 14,
+            Headers.GRADES.value: None,
+            Headers.GRADE_DATE.value: None
         },
         {
-            Headers.RESTAURANT_CODES: "40356018",
-            Headers.INSPECTION_TYPE: "Cycle Inspection / Initial Inspection",
-            Headers.INSPECTION_DATE: "5/14/2019",
-            Headers.INSPECTION_SCORE: 25,
-            Headers.GRADES: "C",
-            Headers.GRADE_DATE: "5/14/2019"
+            Headers.RESTAURANT_CODES.value: "40356018",
+            Headers.INSPECTION_TYPE.value: "Cycle Inspection / Initial Inspection",
+            Headers.INSPECTION_DATE.value: "5/14/2019",
+            Headers.INSPECTION_SCORE.value: 25,
+            Headers.GRADES.value: "C",
+            Headers.GRADE_DATE.value: "5/14/2019"
         },
         {
-            Headers.RESTAURANT_CODES: "40061600",
-            Headers.INSPECTION_TYPE: "Cycle Inspection / Initial Inspection",
-            Headers.INSPECTION_DATE: "5/16/2019",
-            Headers.INSPECTION_SCORE: 5,
-            Headers.GRADES: "A",
-            Headers.GRADE_DATE: "5/16/2019"
+            Headers.RESTAURANT_CODES.value: "40061600",
+            Headers.INSPECTION_TYPE.value: "Cycle Inspection / Initial Inspection",
+            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.INSPECTION_SCORE.value: 5,
+            Headers.GRADES.value: "A",
+            Headers.GRADE_DATE.value: "5/16/2019"
         }
     ]
     inspections = transform.transform_inspections(untransformed)
@@ -293,32 +293,32 @@ def test_transform_violations():
         score=25)
     untransformed = [
         {
-            Headers.RESTAURANT_CODES: "30075445",
-            Headers.INSPECTION_DATE: "5/16/2019",
-            Headers.VIOLATION_CODE: "04J",
-            Headers.VIOLATION_DESCRIPTION: description,
-            Headers.CRITICAL_RATING: "Critical"
+            Headers.RESTAURANT_CODES.value: "30075445",
+            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.VIOLATION_CODE.value: "04J",
+            Headers.VIOLATION_DESCRIPTION.value: description,
+            Headers.CRITICAL_RATING.value: "Critical"
         },
         {
-            Headers.RESTAURANT_CODES: "30075445",
-            Headers.INSPECTION_DATE: "5/15/2019",
-            Headers.VIOLATION_CODE: "08A",
-            Headers.VIOLATION_DESCRIPTION: description,
-            Headers.CRITICAL_RATING: "Not Applicable"
+            Headers.RESTAURANT_CODES.value: "30075445",
+            Headers.INSPECTION_DATE.value: "5/15/2019",
+            Headers.VIOLATION_CODE.value: "08A",
+            Headers.VIOLATION_DESCRIPTION.value: description,
+            Headers.CRITICAL_RATING.value: "Not Applicable"
         },
         {
-            Headers.RESTAURANT_CODES: "40356018",
-            Headers.INSPECTION_DATE: "5/16/2019",
-            Headers.VIOLATION_CODE: "10F",
-            Headers.VIOLATION_DESCRIPTION: description,
-            Headers.CRITICAL_RATING: "Critical"
+            Headers.RESTAURANT_CODES.value: "40356018",
+            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.VIOLATION_CODE.value: "10F",
+            Headers.VIOLATION_DESCRIPTION.value: description,
+            Headers.CRITICAL_RATING.value: "Critical"
         },
         {
-            Headers.RESTAURANT_CODES: "40356018",
-            Headers.INSPECTION_DATE: "5/16/2019",
-            Headers.VIOLATION_CODE: "06D",
-            Headers.VIOLATION_DESCRIPTION: description,
-            Headers.CRITICAL_RATING: "Not Critical"
+            Headers.RESTAURANT_CODES.value: "40356018",
+            Headers.INSPECTION_DATE.value: "5/16/2019",
+            Headers.VIOLATION_CODE.value: "06D",
+            Headers.VIOLATION_DESCRIPTION.value: description,
+            Headers.CRITICAL_RATING.value: "Not Critical"
         }
     ]
     violations = transform.transform_violations(untransformed)
