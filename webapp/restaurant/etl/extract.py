@@ -4,6 +4,19 @@ from django.utils.text import slugify
 from . import Headers
 
 
+def extract_all(csv_buffer):
+    """Run extractions on all models for a CSV File"""
+    csv = pd.read_csv(csv_buffer)
+    return {
+        "restaurant_types": extract_restaurant_types(csv),
+        "restaurants": extract_restaurants(csv),
+        "restaurant_contacts": extract_restaurant_contacts(csv),
+        "grades": extract_grades(csv),
+        "inspection_types": extract_inspection_types(csv),
+        "inspections": extract_inspections(csv),
+        "violations": extract_violations(csv)}
+
+
 def extract_restaurant_types(csv):
     """Normalize data for RestaurantType model transformation"""
     restaurant_types = csv[Headers.RESTAURANT_TYPES.value].apply(lambda x: x.title())

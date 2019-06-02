@@ -1,5 +1,20 @@
+import io
+import os
 import pandas as pd
 from webapp.restaurant.etl import extract, Headers
+from . import data_folder
+
+
+def test_extract_all():
+    with io.open(os.path.join(data_folder, "inspection_violations.csv"), "r", encoding="ISO-8859-1") as csv_buffer:
+        extracted = extract.extract_all(csv_buffer)
+    assert len(list(extracted["restaurant_types"])) == 23
+    assert len(list(extracted["restaurants"])) == 61
+    assert len(list(extracted["restaurant_contacts"])) == 61
+    assert len(list(extracted["grades"])) == 4
+    assert len(list(extracted["inspection_types"])) == 13
+    assert len(list(extracted["inspections"])) == 340
+    assert len(list(extracted["violations"])) == 999
 
 
 def test_extract_restaurant_types():
