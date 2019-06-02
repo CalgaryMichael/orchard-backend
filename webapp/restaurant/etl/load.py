@@ -41,3 +41,11 @@ def load_inspections(inspections):
     for batch in chunk(inspections):
         loaded += models.Inspection.objects.bulk_create(batch, constants.BATCH_SIZE)
     return loaded
+
+
+def load_violations(violations):
+    """Load Violation objects into database"""
+    loaded = list()
+    for batch in chunk(violations):
+        loaded += models.Violation.objects.bulk_create(batch, constants.BATCH_SIZE)
+    return loaded

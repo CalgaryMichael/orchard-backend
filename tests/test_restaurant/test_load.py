@@ -1,6 +1,6 @@
 import datetime
 import pytest
-from webapp.restaurant import models
+from webapp.restaurant import choices, models
 from webapp.restaurant.etl import load
 from . import utils
 
@@ -182,3 +182,53 @@ def test_load_inspections__empty_list():
     unloaded = []
     load.load_inspections(unloaded)
     assert models.Inspection.objects.all().count() == 0
+
+
+@pytest.mark.django_db
+def test_load_violations():
+    description = "Evidence of mice or live mice present in facility's food and/or non-food areas."
+    restaurant1 = utils.create_restaurant(code="30075445", name="WENDY'S", type_slug="hamburgers")
+    restaurant2 = utils.create_restaurant(code="40356018", name="RIVIERA CATERING", type_slug="american")
+    inspect1 = utils.create_inspection(
+        restaurant=restaurant1,
+        inspection_type="Cycle Inspection / Initial Inspection",
+        date="2019-05-16",
+        score=14)
+    inspect2 = utils.create_inspection(
+        restaurant=restaurant1,
+        inspection_type="Cycle Inspection / Initial Inspection",
+        date="2019-05-15",
+        score=20)
+    inspect3 = utils.create_inspection(
+        restaurant=restaurant2,
+        inspection_type="Cycle Inspection / Initial Inspection",
+        date="2019-05-16",
+        score=25)
+
+    unloaded = [
+        models.Violation(
+            inspection_id=inspect1.id,
+            code="04J",
+            description=description,
+            critical_rating=choices.CriticalRating.CRITICAL.value),
+        models.Violation(
+            inspection_id=inspect2.id,
+            code="08A",
+            description=description,
+            critical_rating=choices.CriticalRating.NOT_APPLICABLE.value),
+        models.Violation(
+            inspection_id=inspect3.id,
+            code="10F",
+            description=description,
+            critical_rating=choices.CriticalRating.CRITICAL.value),
+        models.Violation(
+            inspection_id=inspect3.id,
+            code="06D",
+            description=description,
+            critical_rating=choices.CriticalRating.NOT_CRITICAL.value)
+    ]
+    load.load_violations(unloaded)
+    assert models.Violation.objects.all().count() == 4
+    assert models.Violation.objects.filter(inspection=inspect1).count() == 1
+    assert models.Violation.objects.filter(inspection=inspect2).count() == 1
+    assert models.Violation.objects.filter(inspection=inspect3).count() == 2

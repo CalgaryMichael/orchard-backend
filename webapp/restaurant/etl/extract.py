@@ -47,3 +47,13 @@ def _extract_inspections(csv):
         Headers.GRADE_DATE]
     grades = csv[columns].drop_duplicates(subset=[Headers.RESTAURANT_CODES, Headers.INSPECTION_DATE])
     return grades.to_dict(orient="record")
+
+
+def _extract_violations(csv):
+    columns = [
+        Headers.RESTAURANT_CODES,
+        Headers.INSPECTION_DATE,
+        Headers.VIOLATION_CODE,
+        Headers.VIOLATION_DESCRIPTION,
+        Headers.CRITICAL_RATING]
+    return csv[columns].to_dict(orient="records")

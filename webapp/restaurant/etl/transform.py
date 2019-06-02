@@ -1,6 +1,7 @@
 import functools
 import datetime
-from webapp.restaurant import models
+import pandas as pd
+from webapp.restaurant import choices, models
 from django.utils.text import slugify
 from . import Headers
 
@@ -69,3 +70,30 @@ def _transform_inspections(inspections):
             "inspection_date": _convert_date(inspection_date),
             "score": inspection[Headers.INSPECTION_SCORE]})
     return (models.Inspection(**inspection) for inspection in inspection_mapping)
+
+
+def _get_inspection_id(inspections, violation):
+    """Finds the associated Inspection ID for a row of extracted Violation data"""
+    inspection_date = datetime.datetime.strptime(violation[Headers.INSPECTION_DATE], "%m/%d/%Y").date()
+    inspection = inspections[
+        (violation[Headers.RESTAURANT_CODES] == inspections.restaurant__code)
+        & (inspection_date == inspections.inspection_date)
+    ]
+    return inspection.id.values[0]
+
+
+def _transform_violations(violations):
+    """Returns a generator of normalized Inspection objects"""
+    violation_mapping = list()
+    inspection_mapping = models.Inspection.objects.all().values("id", "inspection_date", "restaurant__code")
+    inspections = pd.DataFrame.from_records(inspection_mapping)
+    for violation in violations:
+        inspection_id = _get_inspection_id(inspections, violation)
+        critical_rating = choices.CriticalRating.from_slug(slugify(violation[Headers.CRITICAL_RATING]))
+        violation_mapping.append({
+            "inspection_id": inspection_id,
+            "code": violation[Headers.VIOLATION_CODE],
+            "critical_rating": critical_rating.value,
+            "description": violation[Headers.VIOLATION_DESCRIPTION]
+        })
+    return (models.Violation(**violation) for violation in violation_mapping)

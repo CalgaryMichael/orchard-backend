@@ -19,6 +19,16 @@ class CriticalRating(ChoiceEnum):
     NOT_CRITICAL = 1
     CRITICAL = 2
 
+    @classmethod
+    def from_slug(cls, slug):
+        if slug is None:
+            return
+        slug_mapping = {
+            "not-applicable": cls.NOT_APPLICABLE,
+            "not-critical": cls.NOT_CRITICAL,
+            "critical": cls.CRITICAL}
+        return slug_mapping[slug]
+
 
 class Boro(ChoiceEnum):
     BRONX = "bronx"

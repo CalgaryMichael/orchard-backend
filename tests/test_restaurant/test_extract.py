@@ -241,3 +241,60 @@ def test_extract_grades__empty():
     expected_data = []
     grades = extract._extract_grades(csv)
     assert list(grades) == expected_data
+
+
+def test_extract_violations():
+    violation_description = "Evidence of mice or live mice present in facility's food and/or non-food areas."
+    csv = pd.DataFrame.from_dict({
+        Headers.RESTAURANT_CODES: ["30075445", "30075445", "40356018", "40356018"],
+        Headers.INSPECTION_DATE: ["5/16/2019", "5/15/2019", "5/16/2019", "5/16/2019"],
+        Headers.VIOLATION_CODE: ["04J", "08A", "10F", "06D"],
+        Headers.VIOLATION_DESCRIPTION: [violation_description] * 4,
+        Headers.CRITICAL_RATING: ["Critical", "Critical", "Critical", "Not Critical"]
+    })
+    violations = extract._extract_violations(csv)
+    expected_violations = [
+        {
+            Headers.RESTAURANT_CODES: "30075445",
+            Headers.INSPECTION_DATE: "5/16/2019",
+            Headers.VIOLATION_CODE: "04J",
+            Headers.VIOLATION_DESCRIPTION: violation_description,
+            Headers.CRITICAL_RATING: "Critical"
+        },
+        {
+            Headers.RESTAURANT_CODES: "30075445",
+            Headers.INSPECTION_DATE: "5/15/2019",
+            Headers.VIOLATION_CODE: "08A",
+            Headers.VIOLATION_DESCRIPTION: violation_description,
+            Headers.CRITICAL_RATING: "Critical"
+        },
+        {
+            Headers.RESTAURANT_CODES: "40356018",
+            Headers.INSPECTION_DATE: "5/16/2019",
+            Headers.VIOLATION_CODE: "10F",
+            Headers.VIOLATION_DESCRIPTION: violation_description,
+            Headers.CRITICAL_RATING: "Critical"
+        },
+        {
+            Headers.RESTAURANT_CODES: "40356018",
+            Headers.INSPECTION_DATE: "5/16/2019",
+            Headers.VIOLATION_CODE: "06D",
+            Headers.VIOLATION_DESCRIPTION: violation_description,
+            Headers.CRITICAL_RATING: "Not Critical"
+        }
+    ]
+    assert violations == expected_violations
+
+
+def test_extract_violations__empty():
+    violation_description = "Evidence of mice or live mice present in facility's food and/or non-food areas."
+    csv = pd.DataFrame.from_dict({
+        Headers.RESTAURANT_CODES: [],
+        Headers.INSPECTION_DATE: [],
+        Headers.VIOLATION_CODE: [],
+        Headers.VIOLATION_DESCRIPTION: [],
+        Headers.CRITICAL_RATING: []
+    })
+    violations = extract._extract_violations(csv)
+    expected_violations = []
+    assert violations == expected_violations

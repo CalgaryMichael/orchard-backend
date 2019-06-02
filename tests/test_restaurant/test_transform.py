@@ -1,6 +1,6 @@
 import datetime
 import pytest
-from webapp.restaurant import models
+from webapp.restaurant import choices, models
 from webapp.restaurant.etl import transform, Headers
 from . import utils
 
@@ -252,3 +252,83 @@ def test_transform_inspections():
         assert inspection.score == expected_inspections[i].score
         assert inspection.grade_id == expected_inspections[i].grade_id
         assert inspection.grade_date == expected_inspections[i].grade_date
+
+
+@pytest.mark.django_db
+def test_transform_violations():
+    description = "Evidence of mice or live mice present in facility's food and/or non-food areas."
+    restaurant1 = utils.create_restaurant(code="30075445", name="WENDY'S", type_slug="hamburgers")
+    restaurant2 = utils.create_restaurant(code="40356018", name="RIVIERA CATERING", type_slug="american")
+    inspect1 = utils.create_inspection(
+        restaurant=restaurant1,
+        inspection_type="Cycle Inspection / Initial Inspection",
+        date="2019-05-16",
+        score=14)
+    inspect2 = utils.create_inspection(
+        restaurant=restaurant1,
+        inspection_type="Cycle Inspection / Initial Inspection",
+        date="2019-05-15",
+        score=20)
+    inspect3 = utils.create_inspection(
+        restaurant=restaurant2,
+        inspection_type="Cycle Inspection / Initial Inspection",
+        date="2019-05-16",
+        score=25)
+    untransformed = [
+        {
+            Headers.RESTAURANT_CODES: "30075445",
+            Headers.INSPECTION_DATE: "5/16/2019",
+            Headers.VIOLATION_CODE: "04J",
+            Headers.VIOLATION_DESCRIPTION: description,
+            Headers.CRITICAL_RATING: "Critical"
+        },
+        {
+            Headers.RESTAURANT_CODES: "30075445",
+            Headers.INSPECTION_DATE: "5/15/2019",
+            Headers.VIOLATION_CODE: "08A",
+            Headers.VIOLATION_DESCRIPTION: description,
+            Headers.CRITICAL_RATING: "Not Applicable"
+        },
+        {
+            Headers.RESTAURANT_CODES: "40356018",
+            Headers.INSPECTION_DATE: "5/16/2019",
+            Headers.VIOLATION_CODE: "10F",
+            Headers.VIOLATION_DESCRIPTION: description,
+            Headers.CRITICAL_RATING: "Critical"
+        },
+        {
+            Headers.RESTAURANT_CODES: "40356018",
+            Headers.INSPECTION_DATE: "5/16/2019",
+            Headers.VIOLATION_CODE: "06D",
+            Headers.VIOLATION_DESCRIPTION: description,
+            Headers.CRITICAL_RATING: "Not Critical"
+        }
+    ]
+    violations = transform._transform_violations(untransformed)
+    expected_violations = [
+        models.Violation(
+            inspection_id=inspect1.id,
+            code="04J",
+            description=description,
+            critical_rating=choices.CriticalRating.CRITICAL.value),
+        models.Violation(
+            inspection_id=inspect2.id,
+            code="08A",
+            description=description,
+            critical_rating=choices.CriticalRating.NOT_APPLICABLE.value),
+        models.Violation(
+            inspection_id=inspect3.id,
+            code="10F",
+            description=description,
+            critical_rating=choices.CriticalRating.CRITICAL.value),
+        models.Violation(
+            inspection_id=inspect3.id,
+            code="06D",
+            description=description,
+            critical_rating=choices.CriticalRating.NOT_CRITICAL.value)
+    ]
+    for i, violation in enumerate(violations):
+        assert violation.inspection_id == expected_violations[i].inspection_id
+        assert violation.code == expected_violations[i].code
+        assert violation.critical_rating == expected_violations[i].critical_rating
+        assert violation.description == expected_violations[i].description
