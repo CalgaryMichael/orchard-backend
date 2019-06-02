@@ -59,7 +59,7 @@ def test_restaurant_contact_serializer():
     serializer = serializers.RestaurantContactSerializer(restaurant_contact)
     expected_data = {
         "boro": "brooklyn",
-        "building_number": 100,
+        "building_number": "100",
         "street": "123 Somewhere Ave.",
         "zip_code": "12345",
         "phone": "4445554444"}
@@ -84,7 +84,7 @@ def test_restaurant_serializer__no_inspections():
         "restaurant_type": "Hamburgers",
         "contact": {
             "boro": "brooklyn",
-            "building_number": 100,
+            "building_number": "100",
             "street": "123 Somewhere Ave.",
             "zip_code": "12345",
             "phone": "4445554444"
@@ -117,7 +117,7 @@ def test_restaurant_serializer__one_inspection():
         "restaurant_type": "Hamburgers",
         "contact": {
             "boro": "brooklyn",
-            "building_number": 100,
+            "building_number": "100",
             "street": "123 Somewhere Ave.",
             "zip_code": "12345",
             "phone": "4445554444"
@@ -165,7 +165,7 @@ def test_restaurant_serializer__multiple_inspections():
         "restaurant_type": "Hamburgers",
         "contact": {
             "boro": "brooklyn",
-            "building_number": 100,
+            "building_number": "100",
             "street": "123 Somewhere Ave.",
             "zip_code": "12345",
             "phone": "4445554444"

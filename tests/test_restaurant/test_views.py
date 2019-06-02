@@ -60,7 +60,7 @@ def test_restaurant_view_set__list__single_restaurant(client):
             "restaurant_type": "Hamburgers",
             "contact": {
                 "boro": "brooklyn",
-                "building_number": 100,
+                "building_number": "100",
                 "street": "123 Somewhere Ave.",
                 "zip_code": "12345",
                 "phone": "4445554444"
@@ -101,7 +101,7 @@ def test_restaurant_view_set__list__multiple_restaurants(client):
             "restaurant_type": "Hamburgers",
             "contact": {
                 "boro": "brooklyn",
-                "building_number": 100,
+                "building_number": "100",
                 "street": "123 Somewhere Ave.",
                 "zip_code": "12345",
                 "phone": "4445554444"
@@ -130,7 +130,7 @@ def test_restaurant_view_set__list__multiple_restaurants(client):
             "restaurant_type": "Bakery",
             "contact": {
                 "boro": "bronx",
-                "building_number": 1007,
+                "building_number": "1007",
                 "street": "MORRIS PARK AVE",
                 "zip_code": "10462",
                 "phone": "7188924968"
