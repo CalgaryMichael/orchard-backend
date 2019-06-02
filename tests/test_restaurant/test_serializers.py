@@ -47,17 +47,6 @@ def test_inspection_serializer__without_grade():
 
 
 @pytest.mark.django_db
-def test_restaurant_type_serializer():
-    restaurant_type = models.RestaurantType.objects.create(slug="hamburgers", description="Hamburgers")
-    serializer = serializers.RestaurantTypeSerializer(restaurant_type)
-    expected_data = {
-        "id": 1,
-        "slug": "hamburgers",
-        "description": "Hamburgers"}
-    assert serializer.data == expected_data
-
-
-@pytest.mark.django_db
 def test_restaurant_contact_serializer():
     restaurant = utils.create_restaurant(code="30004700", name="WENDY'S", type_slug="hamburgers")
     restaurant_contact = utils.create_restaurant_contact(
