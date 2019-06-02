@@ -51,9 +51,20 @@ class Grade(models.Model):
         return self.label
 
 
+class InspectionType(models.Model):
+    slug = models.SlugField(max_length=100)
+    description = models.CharField(max_length=100)
+
+    def __repr__(self):
+        return "<InspectionType {}>".format(self.id)
+
+    def __str__(self):
+        return self.description
+
+
 class Inspection(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
-    inspection_type = models.CharField(max_length=100)
+    inspection_type = models.ForeignKey(InspectionType, on_delete=models.CASCADE)
     inspection_date = models.DateField(null=True)
     score = models.PositiveSmallIntegerField(null=True)
     grade = models.ForeignKey(Grade, null=True, on_delete=models.CASCADE)
@@ -67,7 +78,7 @@ class Inspection(models.Model):
 
 
 class Violation(models.Model):
-    inspection = models.OneToOneField(Inspection, on_delete=models.CASCADE)
+    inspection = models.ForeignKey(Inspection, on_delete=models.CASCADE)
     code = models.CharField(max_length=5)
     critical_rating = models.PositiveSmallIntegerField(choices=choices.CriticalRating.choices())
     description = models.CharField(max_length=100)
