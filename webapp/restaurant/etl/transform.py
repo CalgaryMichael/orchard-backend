@@ -45,6 +45,11 @@ def transform_grades(grade_list):
     return (models.Grade(slug=slugify(g), label=g) for g in grade_list)
 
 
+def transform_inspection_types(inspection_types):
+    """Returns a generator of normalized InspectionType objects"""
+    return (models.InspectionType(slug=slugify(i), description=i) for i in inspection_types)
+
+
 def _convert_date(date_string):
     """Convert a string into a Date object or None"""
     return datetime.datetime.strptime(date_string, "%m/%d/%Y").date() if date_string else None

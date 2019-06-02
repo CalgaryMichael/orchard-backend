@@ -120,6 +120,25 @@ def test_extract_restaurant_contacts__empty():
     assert restaurants == expected_data
 
 
+def test_extract_inspection_types():
+    csv = pd.DataFrame.from_dict({Headers.INSPECTION_TYPE: [
+        "Cycle Inspection / Initial Inspection",
+        None,
+        "Smoke-Free Air Act / Re-inspection"]})
+    expected_data = [
+        "Cycle Inspection / Initial Inspection",
+        "Smoke-Free Air Act / Re-inspection"]
+    inspection_types = extract.extract_inspection_types(csv)
+    assert list(inspection_types) == expected_data
+
+
+def test_extract_inspection_types__empty_list():
+    csv = pd.DataFrame.from_dict({Headers.INSPECTION_TYPE: []})
+    expected_data = []
+    inspection_types = extract.extract_inspection_types(csv)
+    assert list(inspection_types) == expected_data
+
+
 def test_extract_inspections():
     csv = pd.DataFrame.from_dict({
         Headers.RESTAURANT_CODES: ["30075445", "30112340", "40356018", "40356018", "40061600"],

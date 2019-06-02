@@ -35,6 +35,14 @@ def load_grades(grades):
     return models.Grade.objects.bulk_create(grades)
 
 
+def load_inspection_types(inspection_types):
+    """Load InspectionType objects into database"""
+    loaded = list()
+    for batch in chunk(inspection_types):
+        loaded += models.InspectionType.objects.bulk_create(batch, constants.BATCH_SIZE)
+    return loaded
+
+
 def load_inspections(inspections):
     """Load Inspection objects into database"""
     loaded = list()

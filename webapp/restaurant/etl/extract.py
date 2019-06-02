@@ -36,6 +36,12 @@ def extract_grades(csv):
     return (grade for grade in grades.unique())
 
 
+def extract_inspection_types(csv):
+    """Normalize data for InspectionType model transformation"""
+    inspection_types = csv[Headers.INSPECTION_TYPE].dropna()
+    return (inspection_type for inspection_type in inspection_types.unique())
+
+
 def extract_inspections(csv):
     """Normalize data for Inspection model transformation"""
     columns = [
@@ -50,6 +56,7 @@ def extract_inspections(csv):
 
 
 def extract_violations(csv):
+    """Normalize data for Violation model transformation"""
     columns = [
         Headers.RESTAURANT_CODES,
         Headers.INSPECTION_DATE,

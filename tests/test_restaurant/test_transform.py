@@ -152,6 +152,23 @@ def test_transform_grades():
         assert grade.label == expected_grades[i].label
 
 
+def test_transform_inspection_types():
+    untransformed = [
+        "Cycle Inspection / Initial Inspection",
+        "Smoke-Free Air Act / Re-inspection"]
+    inspection_types = transform.transform_inspection_types(untransformed)
+    expected_types = [
+        models.InspectionType(
+            slug="cycle-inspection-initial-inspection",
+            description="Cycle Inspection / Initial Inspection"),
+        models.InspectionType(
+            slug="smoke-free-air-act-re-inspection",
+            description="Smoke-Free Air Act / Re-inspection")]
+    for i, inspection_type in enumerate(inspection_types):
+        assert inspection_type.slug == expected_types[i].slug
+        assert inspection_type.description == expected_types[i].description
+
+
 @pytest.mark.django_db
 def test_transform_inspections():
     inspection_type = utils.create_inspection_type("Cycle Inspection / Initial Inspection")

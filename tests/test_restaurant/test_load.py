@@ -114,6 +114,28 @@ def test_load_grades__empty_list():
 
 
 @pytest.mark.django_db
+def test_load_inspection_types():
+    assert models.InspectionType.objects.all().count() == 0
+    unloaded = [
+        models.InspectionType(
+            slug="cycle-inspection-initial-inspection",
+            description="Cycle Inspection / Initial Inspection"),
+        models.InspectionType(
+            slug="smoke-free-air-act-re-inspection",
+            description="Smoke-Free Air Act / Re-inspection")]
+    load.load_inspection_types(unloaded)
+    assert models.InspectionType.objects.all().count() == 2
+
+
+@pytest.mark.django_db
+def test_load_inspection_types__empty_list():
+    assert models.InspectionType.objects.all().count() == 0
+    unloaded = []
+    load.load_inspection_types(unloaded)
+    assert models.InspectionType.objects.all().count() == 0
+
+
+@pytest.mark.django_db
 def test_load_inspections():
     inspection_type = utils.create_inspection_type("Cycle Inspection / Initial Inspection")
 
