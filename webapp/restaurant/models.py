@@ -28,7 +28,7 @@ class Restaurant(models.Model):
 class RestaurantContact(models.Model):
     restaurant = models.OneToOneField(Restaurant, on_delete=models.CASCADE)
     boro = models.CharField(choices=choices.Boro.choices(), null=True, max_length=25)
-    building_number = models.PositiveSmallIntegerField(null=True)
+    building_number = models.CharField(max_length=15, null=True)
     street = models.CharField(max_length=100, null=True)
     zip_code = models.CharField(max_length=7, null=True)
     phone = models.CharField(max_length=10, null=True)
@@ -81,7 +81,7 @@ class Violation(models.Model):
     inspection = models.ForeignKey(Inspection, on_delete=models.CASCADE)
     code = models.CharField(max_length=5)
     critical_rating = models.PositiveSmallIntegerField(choices=choices.CriticalRating.choices())
-    description = models.CharField(max_length=100)
+    description = models.CharField(max_length=100, null=True)
 
     def __repr__(self):
         return "<Violation {}>".format(self.code)
