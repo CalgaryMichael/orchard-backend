@@ -3,8 +3,8 @@ from . import choices
 
 
 class RestaurantType(models.Model):
-    slug = models.SlugField(db_index=True)
-    description = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=100, db_index=True)
+    description = models.CharField(max_length=100)
 
     def __repr__(self):
         return "<RestaurantType {}>".format(self.slug)
@@ -81,7 +81,7 @@ class Violation(models.Model):
     inspection = models.ForeignKey(Inspection, on_delete=models.CASCADE)
     code = models.CharField(max_length=5)
     critical_rating = models.PositiveSmallIntegerField(choices=choices.CriticalRating.choices())
-    description = models.CharField(max_length=100, null=True)
+    description = models.TextField(null=True)
 
     def __repr__(self):
         return "<Violation {}>".format(self.code)
