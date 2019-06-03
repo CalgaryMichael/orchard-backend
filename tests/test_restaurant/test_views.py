@@ -69,14 +69,12 @@ def test_restaurant_view_set__list__single_restaurant(client):
             },
             "inspections": [
                 {
-                    "inspection_type": "Cycle Inspection / Initial Inspection",
                     "inspection_date": "2018-01-01",
                     "score": 14,
                     "grade": None,
                     "grade_date": None
                 },
                 {
-                    "inspection_type": "Cycle Inspection / Re-inspection",
                     "inspection_date": "2018-01-31",
                     "score": 10,
                     "grade": "A",
@@ -110,14 +108,12 @@ def test_restaurant_view_set__list__multiple_restaurants(client):
             },
             "inspections": [
                 {
-                    "inspection_type": "Cycle Inspection / Initial Inspection",
                     "inspection_date": "2018-01-01",
                     "score": 14,
                     "grade": None,
                     "grade_date": None
                 },
                 {
-                    "inspection_type": "Cycle Inspection / Re-inspection",
                     "inspection_date": "2018-01-31",
                     "score": 10,
                     "grade": "A",
@@ -139,7 +135,6 @@ def test_restaurant_view_set__list__multiple_restaurants(client):
             },
             "inspections": [
                 {
-                    "inspection_type": "Cycle Inspection / Initial Inspection",
                     "inspection_date": "2018-03-01",
                     "score": 20,
                     "grade": "B",

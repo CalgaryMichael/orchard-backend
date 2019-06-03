@@ -18,7 +18,6 @@ def test_inspection_serializer__with_grade():
         grade_slug="a")
     serializer = serializers.InspectionSerializer(inspection)
     expected_data = {
-        "inspection_type": "Cycle Inspection / Initial Inspection",
         "inspection_date": "2018-01-01",
         "score": 14,
         "grade": "A",
@@ -38,7 +37,6 @@ def test_inspection_serializer__without_grade():
         score=14)
     serializer = serializers.InspectionSerializer(inspection)
     expected_data = {
-        "inspection_type": "Cycle Inspection / Initial Inspection",
         "inspection_date": "2018-01-01",
         "score": 14,
         "grade": None,
@@ -124,7 +122,6 @@ def test_restaurant_serializer__one_inspection():
         },
         "inspections": [
             {
-                "inspection_type": "Cycle Inspection / Initial Inspection",
                 "inspection_date": "2018-01-01",
                 "score": 14,
                 "grade": None,
@@ -172,14 +169,12 @@ def test_restaurant_serializer__multiple_inspections():
         },
         "inspections": [
             {
-                "inspection_type": "Cycle Inspection / Initial Inspection",
                 "inspection_date": "2018-01-01",
                 "score": 14,
                 "grade": None,
                 "grade_date": None
             },
             {
-                "inspection_type": "Cycle Inspection / Re-inspection",
                 "inspection_date": "2018-01-31",
                 "score": 10,
                 "grade": "A",

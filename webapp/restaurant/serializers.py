@@ -4,11 +4,10 @@ from . import models
 
 class InspectionSerializer(serializers.ModelSerializer):
     grade = serializers.StringRelatedField()
-    inspection_type = serializers.StringRelatedField()
 
     class Meta:
         model = models.Inspection
-        fields = ("inspection_date", "score", "grade", "grade_date", "inspection_type")
+        fields = ("inspection_date", "score", "grade", "grade_date")
 
 
 class RestaurantContactSerializer(serializers.ModelSerializer):
