@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.aggregates import Max
 from . import choices
 
 
@@ -13,10 +14,17 @@ class RestaurantType(models.Model):
         return self.description
 
 
+class RestaurantQuerySet(models.QuerySet):
+    def minimum_grade(self, minimum_grade):
+        query = self.annotate(minimum_grade=Max("inspection__grade__slug"))
+        return query.filter(minimum_grade__lte=minimum_grade)
+
+
 class Restaurant(models.Model):
-    restaurant_type = models.ForeignKey(RestaurantType, on_delete=models.CASCADE)
-    code = models.CharField(max_length=8, unique=True)
+    restaurant_type = models.ForeignKey(RestaurantType, db_index=True, on_delete=models.CASCADE)
+    code = models.CharField(max_length=8, db_index=True, unique=True)
     name = models.CharField(max_length=200)
+    objects = RestaurantQuerySet.as_manager()
 
     def __repr__(self):
         return "<Restaurant {}>".format(self.code)

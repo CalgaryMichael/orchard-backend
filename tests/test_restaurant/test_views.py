@@ -84,7 +84,7 @@ def test_restaurant_view_set__list__single_restaurant(client):
         }
     ]
     assert response.status_code == 200
-    assert json.loads(response.content) == expected_data
+    assert json.loads(response.content)["results"] == expected_data
 
 
 @pytest.mark.django_db
@@ -145,23 +145,8 @@ def test_restaurant_view_set__list__multiple_restaurants(client):
     ]
     data = json.loads(response.content)
     assert response.status_code == 200
-    assert len(data) == 2
-    assert data == expected_data
-
-
-@pytest.mark.django_db
-def test_restaurant_view_set__search__code(client):
-    _create_restaurant1()
-    _create_restaurant2()
-
-    params = urllib.parse.urlencode({"search": "30004700"})
-    url = reverse("restaurant-list") + "?{}".format(params)
-    response = client.get(url)
-    data = json.loads(response.content)
-
-    assert response.status_code == 200
-    assert len(data) == 1
-    assert data[0]["code"] == "30004700"
+    assert data["count"] == 2
+    assert data["results"] == expected_data
 
 
 @pytest.mark.django_db
@@ -169,14 +154,14 @@ def test_restaurant_view_set__search__restaurant_type(client):
     _create_restaurant1()
     _create_restaurant2()
 
-    params = urllib.parse.urlencode({"search": "bakery"})
+    params = urllib.parse.urlencode({"restaurant_type": "bakery"})
     url = reverse("restaurant-list") + "?{}".format(params)
     response = client.get(url)
     data = json.loads(response.content)
 
     assert response.status_code == 200
-    assert len(data) == 1
-    assert data[0]["code"] == "30075445"
+    assert data["count"] == 1
+    assert data["results"][0]["code"] == "30075445"
 
 
 @pytest.mark.django_db
@@ -190,8 +175,8 @@ def test_restaurant_view_set__minimum_grade__a(client):
     data = json.loads(response.content)
 
     assert response.status_code == 200
-    assert len(data) == 1
-    assert data[0]["code"] == "30004700"
+    assert data["count"] == 1
+    assert data["results"][0]["code"] == "30004700"
 
 
 @pytest.mark.django_db
@@ -205,6 +190,6 @@ def test_restaurant_view_set__minimum_grade__b(client):
     data = json.loads(response.content)
 
     assert response.status_code == 200
-    assert len(data) == 2
-    assert data[0]["code"] == "30004700"
-    assert data[1]["code"] == "30075445"
+    assert data["count"] == 2
+    assert data["results"][0]["code"] == "30004700"
+    assert data["results"][1]["code"] == "30075445"
