@@ -31,7 +31,7 @@ class RestaurantContact(models.Model):
     building_number = models.CharField(max_length=15, null=True)
     street = models.CharField(max_length=100, null=True)
     zip_code = models.CharField(max_length=7, null=True)
-    phone = models.CharField(max_length=10, null=True)
+    phone = models.CharField(max_length=12, null=True)
 
     def __repr__(self):
         return "<RestaurantContact {} ({})>".format(self.boro, self.building_number)
@@ -64,9 +64,9 @@ class InspectionType(models.Model):
 
 class Inspection(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
-    inspection_type = models.ForeignKey(InspectionType, on_delete=models.CASCADE)
+    inspection_type = models.ForeignKey(InspectionType, null=True, on_delete=models.CASCADE)
     inspection_date = models.DateField(null=True)
-    score = models.PositiveSmallIntegerField(null=True)
+    score = models.IntegerField(null=True)
     grade = models.ForeignKey(Grade, null=True, on_delete=models.CASCADE)
     grade_date = models.DateField(null=True)
 
