@@ -17,6 +17,13 @@ _Note_: For more information on drawbacks on design decisions, please see the [F
 
 ---
 
+Following example of the requested cURL request that retrieves all Thai restaurants with a minimum of a "B" grade:
+```bash
+curl -v -L "https://powerful-coast-21514.herokuapp.com/restaurants/?page_size=1000&restaurant_type=thai&minimum_grade=b"
+```
+
+---
+
 The schema for the database is as follows:
 ![Database Schema](docs/dbschema.png)
 
