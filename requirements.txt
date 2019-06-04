@@ -1,5 +1,6 @@
 django==2.2.1
 djangorestframework==3.9.4
+gunicorn==19.9.0
 numpy==1.16.4
 pandas==0.24.2
 psycopg2==2.8.2
